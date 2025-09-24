@@ -1,7 +1,7 @@
 import Login from './Components/Login'
 import Home from './Components/Home'
 import Courses from './Components/Courses'
-import { BrowserRouter,Routes, Route } from 'react-router'
+import { BrowserRouter,Routes, Route, Navigate } from 'react-router'
 import InstructorDashboard from './Components/InstructorDashboard'
 import CourseDetail from './Components/CourseDetail'
 import ProtectedRoute from './Components/ProtectedRoute'
@@ -13,6 +13,7 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute> <Home /></ProtectedRoute>} />
         <Route path="/courses" element={<ProtectedRoute ><Courses /></ProtectedRoute>} />
         <Route path="/course/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute> } />
+        <Route path='*' element={<ProtectedRoute><Navigate to={'/dashboard'} /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
