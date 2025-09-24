@@ -31,7 +31,8 @@ const CourseDetail = () => {
       const response = await fetch(`http://localhost:3000/stats/course/${courseId}`, {
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials:'include',
       });
       if (response.ok) {
         const data = await response.json();
@@ -45,7 +46,7 @@ const CourseDetail = () => {
   };
    const fetchProgress = async() => {
     try {
-      const response = await fetch(`http://localhost:3000/progress/course/${id}/user/${userDetails.id}`)
+      const response = await fetch(`http://localhost:3000/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
       if (response.ok){
         const data = await response.json()
         setProgress(data.details?.percent)
@@ -61,7 +62,7 @@ const CourseDetail = () => {
       const response = await fetch(`http://localhost:3000/courses/${courseId}`, {
         headers: {
           "Content-Type": "application/json",
-        }
+        },credentials:'include',
       });
       if (response.ok) {
         const data = await response.json();
@@ -79,7 +80,8 @@ const CourseDetail = () => {
       const response = await fetch(`http://localhost:3000/courses/${courseId}/lessons`, {
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials:'include',
       });
       if (response.ok) {
         const data = await response.json();

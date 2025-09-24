@@ -19,7 +19,7 @@ const AdminDashboard = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      },
+      },credentials:'include',
       body: JSON.stringify(userData),
     });
     const data = await response.json();
@@ -31,7 +31,14 @@ const AdminDashboard = () => {
 
   const fetchEnrollmentsCounts = async () => {
     try {
-      const response = await fetch('http://localhost:3000/stats/admin');
+      const token = localStorage.getItem("token");
+
+const response = await fetch("http://localhost:3000/stats/admin", {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+  credentials: "include",
+});
       const {details} = await response.json();
       setStats(details);
     } catch (error) {
@@ -40,7 +47,7 @@ const AdminDashboard = () => {
   };
   const fetchEnrollments = async () => {
     try {
-      const response = await fetch('http://localhost:3000/enrollments/');
+      const response = await fetch('http://localhost:3000/enrollments/',{credentials:'include'});
       const { details } = await response.json();
       setUsers(details);
       setPendingEnrollments(details.filter(user => user.status == "pending"));
@@ -54,23 +61,6 @@ const AdminDashboard = () => {
     fetchEnrollmentsCounts();
     fetchEnrollments();
  },[])
-  // const StatCard = ({ icon: Icon, title, value, color }) => (
-  //   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-  //     <div className="flex items-center justify-between">
-  //       <div>
-  //         <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-  //         <p className="text-3xl font-bold text-gray-900">{value}</p>
-  //       </div>
-  //       <div className={`p-3 rounded-lg ${color}`}>
-  //         <Icon className="w-6 h-6 text-white" />
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-
-
-
-
 
   return (
     <div className="min-h-screen bg-gray-50">

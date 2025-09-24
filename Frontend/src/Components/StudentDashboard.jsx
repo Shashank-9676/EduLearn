@@ -16,7 +16,9 @@ const StudentDashboard = () => {
   
   const fetchMyCourses = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/courses/student/${userDetails.id}`);
+      const response = await fetch(`http://localhost:3000/courses/student/${userDetails.id}`,{
+        credentials:'include',
+      });
       const data = await response.json();
       setMyCourses(data.details);
     } catch (error) {
@@ -25,7 +27,9 @@ const StudentDashboard = () => {
   }
   const fetchStudentStats = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/stats/student/${userDetails.id}`);
+      const response = await fetch(`http://localhost:3000/stats/student/${userDetails.id}`,{
+        credentials:'include',
+      });
       const data = await response.json();
       setStudentStats(data.details);
     } catch (error) {
@@ -61,19 +65,6 @@ const StudentDashboard = () => {
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard icon={BookOpen} title="Enrolled Courses" value={studentStats.totalCourses} color="bg-blue-500" />     
-          <StatCard icon={Users} title="Total Students" value={studentStats.totalStudents} color="bg-green-500" />
-          {/* <StatCard
-            icon={Clock}
-            title="Active Courses"
-            value={studentStats.activeCourses}
-            color="bg-purple-500"
-          />
-          <StatCard
-            icon={Award}
-            title="Completed Courses"
-            value={instructorStats.completedCourses}
-            color="bg-orange-500"
-          /> */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8"> 

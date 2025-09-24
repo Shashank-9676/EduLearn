@@ -21,7 +21,7 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
+        },credentials:'include',
         body: JSON.stringify(newLesson),
       });
       if (!response.ok) {

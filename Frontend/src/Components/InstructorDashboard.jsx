@@ -16,7 +16,9 @@ const InstructorDashboard = () => {
   
   const fetchMyCourses = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/courses/instructor/${userDetails.id}`);
+      const response = await fetch(`http://localhost:3000/courses/instructor/${userDetails.id}`,{
+        credentials:'include',
+      });
       const data = await response.json();
       setMyCourses(data.details);
     } catch (error) {
@@ -25,7 +27,7 @@ const InstructorDashboard = () => {
   }
   const fetchInstructorStats = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/stats/instructor/${userDetails.id}`);
+      const response = await fetch(`http://localhost:3000/stats/instructor/${userDetails.id}`,{credentials:'include'});
       const data = await response.json();
       setInstructorStats(data.details);
     } catch (error) {

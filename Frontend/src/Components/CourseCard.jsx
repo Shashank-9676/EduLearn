@@ -18,6 +18,7 @@ import { useNavigate } from "react-router";
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials:'include',
         body: JSON.stringify({ course_id: course.id, user_id: userDetails.id })
       });
       const data = await response.json();

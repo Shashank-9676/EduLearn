@@ -9,6 +9,7 @@ import { useState } from "react";
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials:'include',
         body: JSON.stringify({
           status: isEdit ? 'active' : 'inactive',
         }),

@@ -44,7 +44,7 @@ export const getCourseProgress = async (req, res) => {
         if (instructor.instructor_id === Number(user_id)) {
             // User is instructor, get progress for all enrolled users
             const users = await db.all(
-                `SELECT u.id, u.name, u.email
+                `SELECT u.id, u.username, u.email
                  FROM users u
                  JOIN enrollments e ON u.id = e.user_id
                  WHERE e.course_id = ?`,
@@ -60,7 +60,7 @@ export const getCourseProgress = async (req, res) => {
                     `SELECT COUNT(*) as count
                      FROM lessonprogress lp
                      JOIN lessons l ON lp.lesson_id = l.lesson_id
-                     WHERE lp.user_id = 6 AND l.course_id = 2`,
+                     WHERE lp.user_id = ? AND l.course_id = ?`,
                     [user.id, course_id]
                 );
                 const percent = totalLessons.count === 0 ? 0 : Math.round((completed.count / totalLessons.count) * 100);

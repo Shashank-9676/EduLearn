@@ -4,18 +4,18 @@ import { getLessonById, createLesson, getLessonsByCourse, updateLesson, deleteLe
 import { Router } from "express";
 import {  authMiddleware, rbacMiddleware } from "../middlewares/auth.js";
 const router = Router();
-router.get('/',  getAllCourses);
-router.get('/instructor/:id',  getCourseByInstructor);
-router.get('/student/:id',  getCourseByStudent);
-router.get('/:id',  getCourseById);
-router.post('/',   createCourse);
-router.put('/:id',   updateCourse);
-router.delete('/:id',   deleteCourse);
+router.get('/',authMiddleware,  getAllCourses);
+router.get('/instructor/:id',authMiddleware,  getCourseByInstructor);
+router.get('/student/:id',authMiddleware,  getCourseByStudent);
+router.get('/:id',authMiddleware,  getCourseById);
+router.post('/', authMiddleware, rbacMiddleware(['admin']), createCourse);
+router.put('/:id', authMiddleware,  rbacMiddleware(['admin']), updateCourse);
+router.delete('/:id', authMiddleware, rbacMiddleware(['admin']), deleteCourse);
 
 // Lesson routes
-router.post("/:courseId/lessons",   createLesson);
-router.get("/:courseId/lessons",  getLessonsByCourse);
+router.post("/:courseId/lessons",authMiddleware,rbacMiddleware(['admin', 'instructor']),   createLesson);
+router.get("/:courseId/lessons",authMiddleware,  getLessonsByCourse);
 router.get("/lessons/:id",  getLessonById);
-router.put("/lessons/:id",   updateLesson);
-router.delete("/lessons/:id",   deleteLesson);
+router.put("/lessons/:id",authMiddleware,rbacMiddleware(['admin', 'instructor']),   updateLesson);
+router.delete("/lessons/:id",authMiddleware,rbacMiddleware(['admin', 'instructor']),   deleteLesson);
 export default router;

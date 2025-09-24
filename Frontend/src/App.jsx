@@ -3,19 +3,16 @@ import Home from './Components/Home'
 import Courses from './Components/Courses'
 import { BrowserRouter,Routes, Route } from 'react-router'
 import InstructorDashboard from './Components/InstructorDashboard'
-// import CreateCourseFormDemo from './Components/AddCourseForm'
 import CourseDetail from './Components/CourseDetail'
-import ProgressCircle from './Components/ProgressCircle'
+import ProtectedRoute from './Components/ProtectedRoute'
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Home />} />
-        <Route path='/' element={<InstructorDashboard />}/>
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/course/:id" element={<CourseDetail />} />
-        <Route path="*" element={<ProgressCircle />} />
+        <Route path="/dashboard" element={<ProtectedRoute> <Home /></ProtectedRoute>} />
+        <Route path="/courses" element={<ProtectedRoute ><Courses /></ProtectedRoute>} />
+        <Route path="/course/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute> } />
       </Routes>
     </BrowserRouter>
   )

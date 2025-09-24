@@ -10,6 +10,7 @@ if (!isOpen || !lesson) return null;
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials:'include',
         body: JSON.stringify({
           user_id: userDetails.id, // Replace with actual user ID
           lesson_id: lesson.lesson_id,

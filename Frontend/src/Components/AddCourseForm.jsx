@@ -15,7 +15,7 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
   const [instructorOptions, setInstructorOptions] = useState([]);
   const fetchInstructors = async () => {
     try {
-      const response = await fetch('http://localhost:3000/instructors');
+      const response = await fetch('http://localhost:3000/instructors',{credentials:'include'});
       const data = await response.json();
       console.log(data);
       setInstructorOptions(data.details.map(inst => ({ value: inst.id, label: `${inst.username} - ${inst.department}` })));

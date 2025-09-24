@@ -5,6 +5,7 @@ import { open } from "sqlite";
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv'
 import cors from 'cors'
+import cookieParser from "cookie-parser";
 import courseRoutes from './Routes/course.js'
 import enrollmentRoute from './Routes/enrollment.js'
 import authRoutes from './Routes/AuthRouter.js'
@@ -17,6 +18,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 let db = null;
 const app = express();
+app.use(cookieParser())
 app.use(express.json());
 app.use(cors(
   { origin: 'http://localhost:5173',
