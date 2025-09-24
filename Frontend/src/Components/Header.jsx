@@ -9,7 +9,7 @@ const Header = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const logout = async () => {
-    const response = await fetch('http://localhost:3000/api/logout', {
+    const response = await fetch('https://edulearn-hn19.onrender.com/api/logout', {
       method: 'POST',
       credentials: 'include'
     });

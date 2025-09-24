@@ -16,7 +16,7 @@ const InstructorDashboard = () => {
   
   const fetchMyCourses = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/courses/instructor/${userDetails.id}`,{
+      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/instructor/${userDetails.id}`,{
         credentials:'include',
       });
       const data = await response.json();
@@ -27,7 +27,7 @@ const InstructorDashboard = () => {
   }
   const fetchInstructorStats = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/stats/instructor/${userDetails.id}`,{credentials:'include'});
+      const response = await fetch(`https://edulearn-hn19.onrender.com/stats/instructor/${userDetails.id}`,{credentials:'include'});
       const data = await response.json();
       setInstructorStats(data.details);
     } catch (error) {

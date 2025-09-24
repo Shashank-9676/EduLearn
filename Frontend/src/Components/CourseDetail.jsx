@@ -28,7 +28,7 @@ const CourseDetail = () => {
 
   const fetchStats = async (courseId) => {
     try {
-      const response = await fetch(`http://localhost:3000/stats/course/${courseId}`, {
+      const response = await fetch(`https://edulearn-hn19.onrender.com/stats/course/${courseId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -46,7 +46,7 @@ const CourseDetail = () => {
   };
    const fetchProgress = async() => {
     try {
-      const response = await fetch(`http://localhost:3000/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
+      const response = await fetch(`https://edulearn-hn19.onrender.com/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
       if (response.ok){
         const data = await response.json()
         setProgress(data.details?.percent)
@@ -59,7 +59,7 @@ const CourseDetail = () => {
    }
     const fetchCourseData = async (courseId) => {
     try {
-      const response = await fetch(`http://localhost:3000/courses/${courseId}`, {
+      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${courseId}`, {
         headers: {
           "Content-Type": "application/json",
         },credentials:'include',
@@ -77,7 +77,7 @@ const CourseDetail = () => {
   }
   const fetchLessons = async (courseId) => {
     try {
-      const response = await fetch(`http://localhost:3000/courses/${courseId}/lessons`, {
+      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${courseId}/lessons`, {
         headers: {
           "Content-Type": "application/json",
         },

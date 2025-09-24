@@ -25,7 +25,7 @@ const LMSAuth = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     console.log('Login submitted:', loginData);
-    const response = await fetch('http://localhost:3000/api/login', {
+    const response = await fetch('https://edulearn-hn19.onrender.com/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: loginData.email, password: loginData.password }),
@@ -49,7 +49,7 @@ const LMSAuth = () => {
       return;
     }
     console.log('Register submitted:', registerData);
-    const response = await fetch('http://localhost:3000/api/register', {
+    const response = await fetch('https://edulearn-hn19.onrender.com/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

@@ -13,7 +13,7 @@ import { useNavigate } from "react-router";
       navigate(`/course/${course.id}`);
     }
     const enrollment = async() => {
-      const response = await fetch(`http://localhost:3000/enrollments/`, {
+      const response = await fetch(`https://edulearn-hn19.onrender.com/enrollments/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -15,7 +15,7 @@ const AdminDashboard = () => {
     const [pendingEnrollments, setPendingEnrollments] = useState([]);
   const handleSaveUser = async (userData) => {
     console.log('User data submitted:', userData);
-    const response = await fetch('http://localhost:3000/enrollments', {
+    const response = await fetch('https://edulearn-hn19.onrender.com/enrollments', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-const response = await fetch("http://localhost:3000/stats/admin", {
+const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
   headers: {
     Authorization: `Bearer ${token}`,
   },
@@ -47,7 +47,7 @@ const response = await fetch("http://localhost:3000/stats/admin", {
   };
   const fetchEnrollments = async () => {
     try {
-      const response = await fetch('http://localhost:3000/enrollments/',{credentials:'include'});
+      const response = await fetch('https://edulearn-hn19.onrender.com/enrollments/',{credentials:'include'});
       const { details } = await response.json();
       setUsers(details);
       setPendingEnrollments(details.filter(user => user.status == "pending"));

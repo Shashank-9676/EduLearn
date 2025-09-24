@@ -15,7 +15,7 @@
     };
     const fetchProgress = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/progress/lesson/${lesson.lesson_id}/user/${userDetails.id}`, {
+        const response = await fetch(`https://edulearn-hn19.onrender.com/progress/lesson/${lesson.lesson_id}/user/${userDetails.id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

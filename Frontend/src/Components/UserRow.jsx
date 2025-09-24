@@ -4,7 +4,7 @@ import { useState } from "react";
     const [isEdit, setIsEdit] = useState(false);
     const [isDelete, setIsDelete] = useState(false);
     const handleEdit = async () => {
-      const response = await fetch(`http://localhost:3000/enrollments/${user.id}`, {
+      const response = await fetch(`https://edulearn-hn19.onrender.com/enrollments/${user.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

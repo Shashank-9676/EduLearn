@@ -111,7 +111,7 @@ const Courses = () => {
   const [isOpen, setIsOpen] = useState(false);
     const fetchCourses = async () => {
     try {
-      const response = await fetch("http://localhost:3000/courses",{credentials:'include',});
+      const response = await fetch("https://edulearn-hn19.onrender.com/courses",{credentials:'include',});
       const data = await response.json();
       setCoursesData(data.details);
     } catch (error) {
@@ -120,7 +120,7 @@ const Courses = () => {
   };
   const handleSave = async(courseData) => {
     console.log('Course created:', courseData);
-    const response = await fetch("http://localhost:3000/courses", {
+    const response = await fetch("https://edulearn-hn19.onrender.com/courses", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
