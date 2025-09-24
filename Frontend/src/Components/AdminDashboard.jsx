@@ -31,12 +31,7 @@ const AdminDashboard = () => {
 
   const fetchEnrollmentsCounts = async () => {
     try {
-      const token = localStorage.getItem("token");
-
 const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
   credentials: "include",
 });
       const {details} = await response.json();
