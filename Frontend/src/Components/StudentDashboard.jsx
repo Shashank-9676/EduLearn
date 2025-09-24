@@ -5,6 +5,7 @@ import CourseCard from './CourseCard';
 // import Header from './Header';
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import EmptyView from './EmptyView';
 const StudentDashboard = () => {
   const {userDetails} = useAuth();
   const [studentStats, setStudentStats] = useState({
@@ -43,7 +44,7 @@ const StudentDashboard = () => {
  },[])
 
   if (!studentStats || myCourses.length === 0) {
-    return <div>Loading...</div>;
+    return <EmptyView />;
   }
   return (
     <div className="min-h-screen bg-gray-50">
