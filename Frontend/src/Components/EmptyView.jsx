@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
-
+import { GraduationCap, BookOpen, ArrowRight, Clock,Users } from 'lucide-react'
 function EmptyView() {
     const navigate = useNavigate()
   return (
