@@ -3,12 +3,10 @@ import { X, Save,  UserPlus,  AlertCircle, Star } from 'lucide-react';
 
 const AddUserPopup = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    user_id: null,
     course_id: null,
     instructor_id: null,
-    user_type: null,
-    status: null
-  });
+    department : null
+    });
 
   const [errors, setErrors] = useState({});
   const [options, setOptions] = useState({
@@ -39,8 +37,7 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
 
     fetchOptions();
   }, []);
-  // console.log(options);
-  // Custom Select Component
+
   const CustomSelect = ({ options, value, onChange, placeholder, label, error, renderOption }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -134,12 +131,9 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.user_id) newErrors.user_id = 'User is required';
-    if (!formData.course_id) newErrors.course_id = 'Course is required';
+    // if (!formData.course_id) newErrors.course_id = 'Course is required';
     if (!formData.instructor_id) newErrors.instructor_id = 'Instructor is required';
-    if (!formData.user_type) newErrors.user_type = 'User type is required';
-    if (!formData.status) newErrors.status = 'Status is required';
-
+    if(!formData.department) newErrors.department = 'Department Is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -153,11 +147,9 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
 
   const handleClose = () => {
     setFormData({
-      user_id: null,
       course_id: null,
       instructor_id: null,
-      user_type: null,
-      status: null
+      department : null
     });
     setErrors({});
     onClose();
@@ -166,7 +158,7 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#00000080]">
       {/* Backdrop */}
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div className="inline-block w-full max-w-2xl p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl sm:align-middle">
@@ -178,8 +170,8 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
                 <UserPlus className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">Add User</h3>
-                <p className="text-sm text-gray-500">Assign user to course with instructor</p>
+                <h3 className="text-xl font-semibold text-gray-900">Add Instructor</h3>
+                <p className="text-sm text-gray-500">Select a instructor who already registered</p>
               </div>
             </div>
             <button
@@ -195,11 +187,11 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
             {/* User Selection */}
             <CustomSelect
               options={options.users}
-              value={formData.user_id}
-              onChange={(value) => handleInputChange('user_id', value)}
-              placeholder="Select a user"
-              label="User"
-              error={errors.user_id}
+              value={formData.instructor_id}
+              onChange={(value) => handleInputChange('instructor_id', value)}
+              placeholder="Select an Instructor"
+              label="Instructor"
+              error={errors.instructor_id}
               renderOption={(option) => (
                 <div>
                   <div className="font-medium text-gray-900">{option.label}</div>
@@ -214,64 +206,38 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
               value={formData.course_id}
               onChange={(value) => handleInputChange('course_id', value)}
               placeholder="Select a course"
-              label="Course"
+              label="Course (optional)"
               error={errors.course_id}
             />
-
-            {/* Instructor Selection */}
-            <CustomSelect
-              options={options.instructors}
-              value={formData.instructor_id}
-              onChange={(value) => handleInputChange('instructor_id', value)}
-              placeholder="Select an instructor"
-              label="Instructor"
-              error={errors.instructor_id}
-              renderOption={(option) => (
-                <div>
-                  <div className="font-medium text-gray-900">{option.label}</div>
-                  <div className="text-sm text-gray-500">{option.department}</div>
-                </div>
+            {/* Department Input */}
+            <div className="relative p-4 rounded-lg">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Department <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.department || ''}
+                onChange={e => handleInputChange('department', e.target.value)}
+                placeholder="Enter department"
+                className={`w-full px-4 py-3 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                  errors.department ? 'border-red-300' : 'border-gray-300 hover:border-gray-400'
+                }`}
+              />
+              {errors.department && (
+                <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <AlertCircle className="w-4 h-4 mr-1" />
+                  {errors.department}
+                </p>
               )}
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* User Type Selection */}
-              <CustomSelect
-                options={options.userTypes}
-                value={formData.user_type}
-                onChange={(value) => handleInputChange('user_type', value)}
-                placeholder="Select user type"
-                label="User Type"
-                error={errors.user_type}
-              />
-
-              {/* Status Selection */}
-              <CustomSelect
-                options={options.statuses}
-                value={formData.status}
-                onChange={(value) => handleInputChange('status', value)}
-                placeholder="Select status"
-                label="Status"
-                error={errors.status}
-              />
             </div>
 
-            {/* Action Buttons */}
             <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
-              <button
-                type="button"
-                onClick={handleClose}
-                className="px-6 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
-              >
+              <button type="button" onClick={handleClose} className="px-6 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors">
                 Cancel
               </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <button type="button" onClick={handleSubmit} className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <Save className="w-4 h-4 mr-2" />
-                Save User
+                Save Instructor
               </button>
             </div>
           </div>

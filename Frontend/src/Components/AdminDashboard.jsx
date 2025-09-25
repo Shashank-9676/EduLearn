@@ -10,23 +10,24 @@ const AdminDashboard = () => {
     activeUsers: 0,
     pendingEnrollments: 0
   });
-    // const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [users, setUsers] = useState([]);
     const [pendingEnrollments, setPendingEnrollments] = useState([]);
-  // const handleSaveUser = async (userData) => {
-  //   console.log('User data submitted:', userData);
-  //   const response = await fetch('https://edulearn-hn19.onrender.com/enrollments', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },credentials:'include',
-  //     body: JSON.stringify(userData),
-  //   });
-  //   const data = await response.json();
-  //   console.log('Response from server:', data);
-  //   fetchEnrollments();
-  //   setIsPopupOpen(false);
-  // };
+  const handleSaveUser = async (userData) => {
+    console.log('User data submitted:', userData);
+    const response = await fetch('https://edulearn-hn19.onrender.com/instructors', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials:'include',
+      body: JSON.stringify(userData),
+    });
+    const data = await response.json();
+    console.log('Response from server:', data);
+    fetchEnrollments();
+    setIsPopupOpen(false);
+  };
   
 
   const fetchEnrollmentsCounts = async () => {
@@ -139,10 +140,10 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">Users</h2>
-              {/* <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center" onClick={() => setIsPopupOpen(true)}>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center" onClick={() => setIsPopupOpen(true)}>
                 <UserPlus className="w-4 h-4 mr-2" />Add User
               </button>
-              <AddUserPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} onSave={handleSaveUser} /> */}
+              <AddUserPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} onSave={handleSaveUser} />
             </div>
             <div className="p-6">
               <div className="overflow-hidden">

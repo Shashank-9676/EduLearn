@@ -12,7 +12,8 @@ export const getAllInstructors = async (req, res) => {
 
 export const addInstructor = async (req, res) => {
     try {
-        const { instructor_id, course_id, department } = req.body;
+        const { instructor_id, course_id, department, user_type = "instructor" } = req.body;
+        await db.run(`update users set user_type = ? where id = ?`, [user_type, instructor_id]);
         const result = await db.run(`INSERT INTO Instructors (instructor_id, course_id, department) VALUES (?, ?, ?)`, [instructor_id, course_id, department]);
         res.status(201).json({ message: "Instructor added successfully", id: result.lastID });
     } catch (err) {
