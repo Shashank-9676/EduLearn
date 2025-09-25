@@ -20,11 +20,26 @@ let db = null;
 const app = express();
 app.use(cookieParser())
 app.use(express.json());
-app.use(cors(
-  { origin: 'https://edu-learn-ten-dun.vercel.app',
-    credentials: true
-  }
-));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://edu-learn-ten-dun.vercel.app"
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 const initializeDB = async () => {
   try {
     db = await open({
