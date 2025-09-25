@@ -75,25 +75,25 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
           <StatCard
             icon={Users}
             title="Total Users"
-            value={stats.totalUsers}
+            value={stats?.totalUsers}
             color="bg-gradient-to-r from-blue-500 to-blue-600"
           />
           <StatCard
             icon={BookOpen}
             title="Total Courses"
-            value={stats.totalCourses}
+            value={stats?.totalCourses}
             color="bg-gradient-to-r from-green-500 to-green-600"
           />
           <StatCard
             icon={Activity}
             title="Active Users"
-            value={stats.activeUsers}
+            value={stats?.activeUsers}
             color="bg-gradient-to-r from-purple-500 to-purple-600"
           />
           <StatCard
             icon={Clock}
             title="Pending Enrollments"
-            value={stats.pendingEnrollments}
+            value={stats?.pendingEnrollments}
             color="bg-gradient-to-r from-orange-500 to-orange-600"
           />
         </div>
@@ -107,7 +107,7 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
               <h2 className="text-xl font-semibold text-gray-900">Pending Enrollments</h2>
             </div>
             <div className="p-6">
-              {pendingEnrollments.length > 0 ? (
+              {pendingEnrollments?.length > 0 ? (
                 <div className="overflow-hidden">
                   <table className="min-w-full">
                     <thead>
@@ -120,7 +120,7 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {pendingEnrollments.map((user) => (
+                      {pendingEnrollments?.map((user) => (
                         <UserRow key={user.id} user={user} />
                       ))}
                     </tbody>
@@ -157,7 +157,7 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {users.map((user) => (
+                    {users?.map((user) => (
                       <UserRow key={user.id} user={user} />
                     ))}
                   </tbody>

@@ -89,38 +89,6 @@ function EmptyView() {
             </div>
           </div>
         </div>
-
-        {/* Stats Section */}
-        <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold mb-2">Join Thousands of Learners</h3>
-            <p className="text-blue-100">Start your journey with our growing community</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold mb-2">1,200+</div>
-              <div className="text-blue-100">Active Students</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold mb-2">50+</div>
-              <div className="text-blue-100">Expert Courses</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold mb-2">95%</div>
-              <div className="text-blue-100">Satisfaction Rate</div>
-            </div>
-          </div>
-
-          <div className="text-center mt-8">
-            <button
-              onClick={() => navigate('/')}
-              className="bg-white text-blue-600 hover:bg-gray-100 py-3 px-6 rounded-lg font-semibold transition-colors"
-            >
-              Get Started Now
-            </button>
-          </div>
-        </div>
       </div>
 
   )
