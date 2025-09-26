@@ -121,10 +121,10 @@ if(!coursesData) {
             <p className="text-gray-500 mb-6">
               {searchTerm ? 'Try adjusting your search terms' : 'Get started by creating your first course'}
             </p>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium transition-colors flex items-center mx-auto">
+            {userDetails.role == 'admin' && <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium transition-colors flex items-center mx-auto">
               <Plus className="w-4 h-4 mr-2" />
               Create Course
-            </button>
+            </button>}
           </div>
         ) : (
           <>

@@ -29,7 +29,7 @@ import { useNavigate } from "react-router";
       alert("Request Sent Successfully! Wait for the approval.");
     }
     return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-white  h-full rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Course Image */}
       <div className="relative h-48  bg-gray-700 ">
         {course.status && <div className="absolute top-4 right-4">
@@ -47,7 +47,7 @@ import { useNavigate } from "react-router";
       </div>
 
       {/* Course Content */}
-      <div className="p-6">
+      <div className=" p-6 flex flex-col justify-end mt-auto">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded">
             {course.category}
@@ -60,17 +60,7 @@ import { useNavigate } from "react-router";
           )} */}
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
-
-        {/* <div className="flex items-center text-sm text-gray-500 mb-4">
-          <Users className="w-4 h-4 mr-1" />
-          <span className="mr-4">{course.students} students</span>
-          <FileText className="w-4 h-4 mr-1" />
-          <span className="mr-4">{course.lessons} lessons</span>
-          <Clock className="w-4 h-4 mr-1" />
-          <span>{course.duration}</span>
-        </div> */}
-
+        <p className="text-gray-600 text-sm mb-4 h-16 line-clamp-2">{course.description}</p>
         <div className="flex items-center justify-between mb-4">
           {userDetails.role != "instructor" ? <div>
             <p className="text-sm text-gray-500">Instructor</p>

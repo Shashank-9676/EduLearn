@@ -66,7 +66,7 @@ export const getCourseProgress = async (req, res) => {
                 const percent = totalLessons.count === 0 ? 0 : Math.round((completed.count / totalLessons.count) * 100);
                 results.push({
                     user_id: user.id,
-                    name: user.name,
+                    username: user.username,
                     email: user.email,
                     completed: completed.count,
                     total: totalLessons.count,

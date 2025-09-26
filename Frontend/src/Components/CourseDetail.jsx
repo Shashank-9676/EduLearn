@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { 
   BookOpen,   Plus,  Play,  FileText, Users, CheckCircle,  Edit,  Trash2} from 'lucide-react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import LessonCard from './LessonCard';
 // import ProgressExample from './ProgressCircle';
 import AddLessonForm from './AddLessonForm';
@@ -169,10 +169,15 @@ const CourseDetail = () => {
           </div>
         </div>
 
-        {/* Course Description */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-3">Course Description</h2>
+        
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8 flex justify-between items-center">
+          <div className=''>
+            <h2 className="text-xl font-semibold text-gray-900 mb-3">Course Description</h2>
           <p className="text-gray-600">{courseData.description}</p>
+          </div>
+          <Link to={`/progress/${id}`}>
+            <button className='bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg'>Students Progress</button>
+          </Link>
         </div>
 
         {/* Lessons List */}
