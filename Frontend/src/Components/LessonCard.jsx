@@ -2,12 +2,11 @@
   import { useEffect, useState } from 'react';
   import VideoLesson from './VideoLesson';
   import { useAuth } from '../context/AuthContext';
-// import ProgressExample from './ProgressCircle';
+import { toast, ToastContainer } from 'react-toastify';
   const LessonCard = ({ lesson }) => {
       const {userDetails} = useAuth()
       const [selectedLesson, setSelectedLesson] = useState(null);
-        const [completed, setCompleted] = useState(0);
-
+      const [completed, setCompleted] = useState(0);
       const [isOpen, setIsOpen] = useState(false);
         const openVideo = () => {
         setSelectedLesson(lesson);
@@ -26,6 +25,7 @@
         if (response.ok) {
           setCompleted(data.details?.status);
         } else {
+          toast.error(data.message);
           console.error(data.message);
         }
       } catch (error) {
@@ -72,7 +72,6 @@
       </div>
 
       <p className="text-gray-600 text-sm mb-4">{lesson.description}</p>
-
       <div className="flex items-center text-sm text-gray-500">
         <div className="flex items-center space-x-4">
           <div className="flex items-center">
@@ -83,14 +82,9 @@
         <button className="cursor-pointer ml-[40%]" onClick={openVideo}>See Lesson</button>
 
       </div>
-      <VideoLesson
-        lesson={selectedLesson}
-        isOpen={isOpen}
-        onClose={closeVideo}
-        completed={completed}
-        setCompleted={setCompleted}
-      />
+      <VideoLesson lesson={selectedLesson} isOpen={isOpen} onClose={closeVideo} completed={completed} setCompleted={setCompleted}/>
+      <ToastContainer />
     </div>
   )};
 
-    export default LessonCard;
+export default LessonCard;

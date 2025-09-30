@@ -83,31 +83,15 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description *
-            </label>
-            <textarea
-              rows={4}
-              value={formData.description}
-              onChange={(e) => setFormData({...formData, description: e.target.value})}
-              placeholder="Describe the course content"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+            <textarea rows={4} value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Describe the course content" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"/>
           </div>
 
           {/* Two Column Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Category *
-              </label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({...formData, category: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+              <select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select category</option>
                 {categoryOptions.map((cat) => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -117,14 +101,8 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
 
             {/* Instructor */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Instructor *
-              </label>
-              <select
-                value={formData.instructor_id}
-                onChange={(e) => setFormData({...formData, instructor_id: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">Instructor *</label>
+              <select value={formData.instructor_id} onChange={(e) => setFormData({...formData, instructor_id: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select instructor</option>
                 {instructorOptions.map((instructor) => (
                   <option key={instructor.value} value={instructor.value}>
@@ -136,54 +114,15 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
 
             {/* Level */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Level *
-              </label>
-              <select
-                value={formData.level}
-                onChange={(e) => setFormData({...formData, level: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">Level *</label>
+              <select value={formData.level} onChange={(e) => setFormData({...formData, level: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select level</option>
                 {levelOptions.map((level) => (
                   <option key={level} value={level}>{level}</option>
                 ))}
               </select>
             </div>
-
-            
           </div>
-
-          {/* Status */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Course Status
-            </label>
-            <div className="flex space-x-4">
-              <button
-                type="button"
-                onClick={() => setFormData({...formData, status: 'draft'})}
-                className={`flex-1 py-3 px-4 border rounded-lg transition-colors ${
-                  formData.status === 'draft'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                Save as Draft
-              </button>
-              <button
-                type="button"
-                onClick={() => setFormData({...formData, status: 'active'})}
-                className={`flex-1 py-3 px-4 border rounded-lg transition-colors ${
-                  formData.status === 'active'
-                    ? 'border-green-500 bg-green-50 text-green-700'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                Publish Course
-              </button>
-            </div>
-          </div> */}
             {error && <p className="text-red-500 text-sm">{error}</p>}
           {/* Action Buttons */}
           <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">

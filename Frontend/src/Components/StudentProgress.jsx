@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Users, 
-  Search, 
-  BookOpen,
-  CheckCircle,
-  Clock,
-  TrendingUp,
-  User,
-  Mail,
-  Eye,
-  Award
-} from 'lucide-react';
+import {  Users,   Search,   BookOpen,  CheckCircle,  Clock,  TrendingUp,User,  Mail,  Eye,  Award} from 'lucide-react';
+import {useParams} from 'react-router'
 import StatCard from './StarCard';
 import { useAuth } from '../context/AuthContext';
-const StudentProgress = ({ id }) => {
+import { toast } from 'react-toastify';
+import Header from './Header'
+const StudentProgress = () => {
+  const {id } = useParams()
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
-    const {userDetails} = useAuth()
+  const {userDetails} = useAuth()
 
   useEffect(() => {
     const fetchCourseProgress = async () => {
@@ -26,17 +19,15 @@ const StudentProgress = ({ id }) => {
         setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
         const data = await response.json();
-        
         if (response.ok) {
           setStudents(data.users);
         } else {
-          setError('Failed to fetch course progress');
+          toast.error('Failed to fetch course progress');
         }
-        
+        setLoading(false);
         
       } catch (err) {
         setError('Error loading course data');
-        setLoading(false);
         console.log(err)
       }
     };
@@ -44,13 +35,11 @@ const StudentProgress = ({ id }) => {
     fetchCourseProgress();
   }, [id]);
 
-  // Filter students based on search term
   const filteredStudents = students.filter(student => 
     student.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate statistics
   const stats = {
     totalStudents: students.length,
     completedStudents: students.filter(s => s.percent === 100).length,
@@ -71,8 +60,6 @@ const StudentProgress = ({ id }) => {
     if (percent > 0) return { text: 'In Progress', color: 'bg-blue-100 text-blue-800' };
     return { text: 'Not Started', color: 'bg-gray-100 text-gray-800' };
   };
-
-
 
   const StudentProgressCard = ({ student }) => {
     const status = getStatusBadge(student.percent);
@@ -119,14 +106,6 @@ const StudentProgress = ({ id }) => {
             <span className="font-medium">#{student.user_id}</span>
           </div>
         </div>
-
-        {/* Action Button */}
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <button className="w-full bg-blue-50 text-blue-600 py-2 px-3 rounded text-sm font-medium hover:bg-blue-100 transition-colors flex items-center justify-center">
-            <Eye className="w-4 h-4 mr-1" />
-            View Details
-          </button>
-        </div>
       </div>
     );
   };
@@ -145,6 +124,7 @@ const StudentProgress = ({ id }) => {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        
         <div className="text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-8 h-8 text-red-600" />
@@ -164,7 +144,7 @@ const StudentProgress = ({ id }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      <Header />
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6">
@@ -175,48 +155,20 @@ const StudentProgress = ({ id }) => {
           </div>
         </div>
       </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            icon={Users}
-            title="Total Students"
-            value={stats.totalStudents}
-            color="bg-blue-500"
-          />
-          <StatCard
-            icon={TrendingUp}
-            title="Active Students"
-            value={stats.activeStudents}
-            color="bg-green-500"
-          />
-          <StatCard
-            icon={CheckCircle}
-            title="Completed"
-            value={stats.completedStudents}
-            color="bg-purple-500"
-          />
-          <StatCard
-            icon={Award}
-            title="Average Progress"
-            value={`${stats.averageProgress}%`}
-            color="bg-orange-500"
-          />
+          <StatCard icon={Users} title="Total Students" value={stats.totalStudents} color="bg-blue-500"/>
+          <StatCard icon={TrendingUp} title="Active Students" value={stats.activeStudents} color="bg-green-500" />
+          <StatCard icon={CheckCircle} title="Completed" value={stats.completedStudents} color="bg-purple-500"/>
+          <StatCard icon={Award} title="Average Progress" value={`${stats.averageProgress}%`} color="bg-orange-500"/>
         </div>
 
         {/* Search */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search students by name or email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <input type="text" placeholder="Search students by name or email..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
         </div>
 
@@ -225,9 +177,7 @@ const StudentProgress = ({ id }) => {
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">Student Progress</h2>
-              <span className="text-sm text-gray-500">
-                Showing {filteredStudents.length} of {stats.totalStudents} students
-              </span>
+              <span className="text-sm text-gray-500">Showing {filteredStudents.length} of {stats.totalStudents} students</span>
             </div>
           </div>
           <div className="p-6">
@@ -240,12 +190,8 @@ const StudentProgress = ({ id }) => {
             ) : (
               <div className="text-center py-12">
                 <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {searchTerm ? 'No students found' : 'No students enrolled'}
-                </h3>
-                <p className="text-gray-500">
-                  {searchTerm ? 'Try adjusting your search terms' : 'Students will appear here once they enroll in the course'}
-                </p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{searchTerm ? 'No students found' : 'No students enrolled'}</h3>
+                <p className="text-gray-500">{searchTerm ? 'Try adjusting your search terms' : 'Students will appear here once they enroll in the course'}</p>
               </div>
             )}
           </div>

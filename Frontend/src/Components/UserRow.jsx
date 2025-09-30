@@ -1,5 +1,6 @@
   import { Check, X } from "lucide-react";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
   const UserRow = ({ user }) => {
     const [isEdit, setIsEdit] = useState(false);
     const [isDelete, setIsDelete] = useState(false);
@@ -14,12 +15,17 @@ import { useState } from "react";
           status: isEdit ? 'active' : 'inactive',
         }),
       });
+      if(!response.ok) {
+        toast.error("Error updating enrollment status");
+        return;
+      }
       const data = await response.json();
       console.log(data);
       window.location.reload();
     }
     return(
       <>
+      <ToastContainer />
       <tr className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">

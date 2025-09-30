@@ -1,13 +1,13 @@
   import {Trash2, Eye,Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
-  
+import {ToastContainer,  toast } from 'react-toastify';
   const CourseCard = ({ course }) => {
     const {userDetails} = useAuth()
     const navigate = useNavigate();
     const viewDetails  = () => {
       if(userDetails.id !==course.instructor_id && userDetails.role == "instructor" || course.status == "pending") {
-        alert("You don't have access to view this course");
+        toast.error("You don't have access to view this course");
         return;
       }
       navigate(`/course/${course.id}`);
@@ -23,21 +23,20 @@ import { useNavigate } from "react-router";
       });
       const data = await response.json();
       if(!response.ok) {
-        alert(data.message || "You don't have access to enroll in this course");
+        toast.error(data.message || "You don't have access to enroll in this course");
         return;
       }
-      alert("Request Sent Successfully! Wait for the approval.");
+      toast.success("Request Sent Successfully! Wait for the approval.");
     }
     return (
+      
     <div className="bg-white  h-full rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Course Image */}
+      <ToastContainer theme="colored"/>
       <div className="relative h-48  bg-gray-700 ">
         {course.status && <div className="absolute top-4 right-4">
           <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-            course.status === 'active' ? 'bg-green-100 text-green-800' : 
-            course.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
-            'bg-gray-100 text-gray-800'
-          }`}>
+            course.status === 'active' ? 'bg-green-100 text-green-800' : course.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'}`}>
             {course.status}
           </span>
         </div>}

@@ -73,36 +73,14 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
         
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            icon={Users}
-            title="Total Users"
-            value={stats?.totalUsers}
-            color="bg-gradient-to-r from-blue-500 to-blue-600"
-          />
-          <StatCard
-            icon={BookOpen}
-            title="Total Courses"
-            value={stats?.totalCourses}
-            color="bg-gradient-to-r from-green-500 to-green-600"
-          />
-          <StatCard
-            icon={Activity}
-            title="Active Users"
-            value={stats?.activeUsers}
-            color="bg-gradient-to-r from-purple-500 to-purple-600"
-          />
-          <StatCard
-            icon={Clock}
-            title="Pending Enrollments"
-            value={stats?.pendingEnrollments}
-            color="bg-gradient-to-r from-orange-500 to-orange-600"
-          />
+          <StatCard icon={Users} title="Total Users" value={stats?.totalUsers} color="bg-gradient-to-r from-blue-500 to-blue-600"/>
+          <StatCard icon={BookOpen} title="Total Courses" value={stats?.totalCourses} color="bg-gradient-to-r from-green-500 to-green-600"/>
+          <StatCard icon={Activity} title="Active Users" value={stats?.activeUsers} color="bg-gradient-to-r from-purple-500 to-purple-600"/>
+          <StatCard icon={Clock} title="Pending Enrollments" value={stats?.pendingEnrollments} color="bg-gradient-to-r from-orange-500 to-orange-600"/>
         </div>
 
         {/* Dashboard Content */}
         <div className="space-y-8">
-          
-          {/* Pending Enrollments Section */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Pending Enrollments</h2>

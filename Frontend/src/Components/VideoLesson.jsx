@@ -1,5 +1,6 @@
 import { X, Video, Circle, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { toast, ToastContainer } from 'react-toastify';
 const VideoLesson = ({ lesson, isOpen, onClose,completed, setCompleted }) => {
   const {userDetails} = useAuth();
 if (!isOpen || !lesson) return null;
@@ -20,7 +21,7 @@ if (!isOpen || !lesson) return null;
       console.log("Response:",response)
       const data = await response.json();
       if (!response.ok) {
-        alert(data.message || 'Failed to update progress');
+        toast.error(data.message || 'Failed to update progress');
         return;
       }
       setCompleted(true);
@@ -31,6 +32,7 @@ if (!isOpen || !lesson) return null;
   }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000080] overflow-y-auto p-4 h-screen">
+      <ToastContainer theme="colored" />
       <div className=" bg-white rounded-xl w-full max-w-4xl mx-4">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
@@ -60,12 +62,10 @@ if (!isOpen || !lesson) return null;
           <div className="flex justify-end gap-6">
             <button onClick={onClose} className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors cursor-pointer">Close</button>
             {userDetails.role == "student" ? (!completed ? <button onClick={handleToggle} className={"flex items-center gap-2 px-4 py-2 rounded-md font-medium text-white transition cursor-pointer bg-blue-600 hover:bg-blue-700"}>
-              <Circle size={18} />
-              Mark as Complete
+              <Circle size={18} />Mark as Complete
             </button> : 
             <button className='flex items-center gap-2 px-4 py-2 rounded-md font-medium text-white transition cursor-pointer bg-green-600 hover:bg-green-700'>
-              <CheckCircle size={18} /> 
-              Completed
+              <CheckCircle size={18} /> Completed
             </button>): ''}
           </div>
         </div>

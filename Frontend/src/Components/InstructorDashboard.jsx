@@ -1,20 +1,14 @@
-import React, { useState } from 'react';
-import { BookOpen,   Users,  Clock,  Award} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BookOpen,   Users} from 'lucide-react';
 import StatCard from './StarCard';
 import CourseCard from './CourseCard';
-// import Header from './Header';
-import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import EmptyView from './EmptyView';
+import { toast } from 'react-toastify';
 const InstructorDashboard = () => {
   const {userDetails} = useAuth();
-  const [instructorStats, setInstructorStats] = useState({
-    totalCourses: 5,
-    totalStudents: 128,
-  });
-
+  const [instructorStats, setInstructorStats] = useState({});
   const [myCourses, setMyCourses] = useState([]);
-  
   const fetchMyCourses = async () => {
     try {
       const response = await fetch(`https://edulearn-hn19.onrender.com/courses/instructor/${userDetails.id}`,{
@@ -23,6 +17,7 @@ const InstructorDashboard = () => {
       const data = await response.json();
       setMyCourses(data.details);
     } catch (error) {
+      toast.error("Error fetching courses")
       console.error("Error fetching courses:", error);
     }
   }
@@ -65,20 +60,7 @@ const InstructorDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard icon={BookOpen} title="Assigned Courses" value={instructorStats.totalCourses} color="bg-blue-500" />     
           <StatCard icon={Users} title="Total Students" value={instructorStats.totalStudents} color="bg-green-500" />
-          {/* <StatCard
-            icon={Clock}
-            title="Active Courses"
-            value={instructorStats.activeCourses}
-            color="bg-purple-500"
-          />
-          <StatCard
-            icon={Award}
-            title="Completed Courses"
-            value={instructorStats.completedCourses}
-            color="bg-orange-500"
-          /> */}
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8"> 
           {/* My Courses */}
           <div className="lg:col-span-3">

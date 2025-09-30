@@ -7,23 +7,15 @@ import LessonCard from './LessonCard';
 // import ProgressExample from './ProgressCircle';
 import AddLessonForm from './AddLessonForm';
 import Header from './Header';
+import { toast, ToastContainer } from 'react-toastify';
 const CourseDetail = () => {
   const {userDetails} = useAuth()
     const {id} = useParams()
   const [stats, setStats] = useState(null);
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
   const [progress,setProgress] = useState(0)
-  // Mock course data
-  const [courseData, setCourseData] = useState({
-    id: 1,
-    title: 'React Development Fundamentals',
-    description: 'Learn the basics of React.js and build dynamic web applications from scratch',
-    instructor: 'Dr. John Doe',
-    students: 45,
-    duration: '8 weeks',
-    createdDate: '2025-01-10',
-    status: 'Active'
-  });
+
+  const [courseData, setCourseData] = useState({});
    const [lessons, setLessons] = useState([]);
 
   const fetchStats = async (courseId) => {
@@ -53,6 +45,7 @@ const CourseDetail = () => {
         console.log(data)
       }
     } catch (error) {
+      toast.error("Error fetching Progress data")
       console.error('Error fetching Progress data:', error);
     }
     
@@ -126,7 +119,6 @@ const CourseDetail = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        {/* Course Info */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-center">
@@ -212,7 +204,7 @@ const CourseDetail = () => {
           </div>
         </div>
       </div>
-
+      <ToastContainer />
       {/* Add Lesson Form Modal */}
       {showAddLessonForm && <AddLessonForm setShowAddLessonForm={setShowAddLessonForm} id={id} created_by={userDetails.id} />}
     </div>

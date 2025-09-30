@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, X, Save } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
   const [newLesson, setNewLesson] = useState({
@@ -11,11 +12,9 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
     const handleAddLesson = async (e) => {
         e.preventDefault();
     if (!newLesson.title || !newLesson.content_url) {
-      alert('Please fill all required fields');
+      toast.warning('Please fill all required fields');
       return;
     }
-    
-    // setLessons([...lessons, lesson]);
     try {
       const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${id}/lessons`, {
         method: 'POST',
@@ -25,13 +24,13 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
         body: JSON.stringify(newLesson),
       });
       if (!response.ok) {
-        console.log('Failed to add lesson');
+        toast.error('Failed to add lesson');
         return;
       }else{
         // const data = await response.json();
         setNewLesson({ title: '', description: '', type: 'video', duration: '', content: null });
         setShowAddLessonForm(false);
-        alert('Lesson added successfully!');
+        toast.success('Lesson added successfully!');
         window.location.reload();
       }
       
@@ -51,7 +50,7 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000080] bg-opacity-50">
       <div className="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 max-h-screen overflow-y-auto">
-        
+        <ToastContainer theme="colored"/>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
@@ -73,44 +72,18 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
             <label className="text-sm font-medium text-gray-700 mb-2 block">
               Lesson Title *
             </label>
-            <input
-              type="text"
-              name="title"
-              value={newLesson.title}
-              onChange={handleChange}
-              placeholder="Enter lesson title"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <input type="text" name="title" value={newLesson.title} onChange={handleChange} placeholder="Enter lesson title" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
           </div>
 
           {/* Type and Duration */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Order
-              </label>
-              <input
-                type="number"
-                name="lesson_order"
-                value={newLesson.lesson_order}
-                onChange={handleChange}
-                placeholder="Enter lesson order"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-2">Order</label>
+              <input type="number" name="lesson_order" value={newLesson.lesson_order} onChange={handleChange} placeholder="Enter lesson order" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
-            
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Content Code *
-              </label>
-              <input
-                type="text"
-                name="content_url"
-                value={newLesson.content_url}
-                onChange={handleChange}
-                placeholder="Enter content URL Code"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-2">Content Code *</label>
+              <input type="text" name="content_url" value={newLesson.content_url} onChange={handleChange} placeholder="Enter content URL Code" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
           </div>
 
