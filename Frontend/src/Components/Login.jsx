@@ -1,5 +1,5 @@
-import  { useState } from 'react';
-import { User, Lock, Mail, Eye, EyeOff, GraduationCap, Phone } from 'lucide-react';
+import  { useState, useEffect } from 'react';
+import { User, Lock, Mail, Eye, EyeOff, GraduationCap, Phone, List } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../context/AuthContext.jsx';
 import { toast, ToastContainer } from 'react-toastify';
@@ -14,18 +14,34 @@ const Login = () => {
     email: '',
     password: ''
   });
-  
+  const [organizations, setOrganizations] = useState([]);
+  const [loadingOrgs, setLoadingOrgs] = useState(true);
+
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      try {
+      const res = await fetch('http://localhost:3000/form/organization-options', {credentials:'include'});
+      const data = await res.json();
+      setOrganizations(data.details || []);
+      } catch (err) {
+        console.log("Error fetching organizations:", err);
+      } finally {
+      setLoadingOrgs(false);
+      }
+    };
+    fetchOrganizations();
+  }, []);
   const [registerData, setRegisterData] = useState({
     username: '',
     email: '',
     contact: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    organization_id: ''
   });
     const navigate = useNavigate();
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login submitted:', loginData);
     const response = await fetch('https://edulearn-hn19.onrender.com/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -35,8 +51,8 @@ const Login = () => {
     const data = await response.json();
     if (response.ok) {
       setError(null);
-      localStorage.setItem('userDetails', JSON.stringify({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type }));
-      setUserDetails({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type });
+      localStorage.setItem('userDetails', JSON.stringify({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name }));
+      setUserDetails({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name });
       navigate('/dashboard')
     } else {
       setError(data.message || 'Login failed');
@@ -49,7 +65,6 @@ const Login = () => {
       toast.error('Passwords do not match!');
       return;
     }
-    console.log('Register submitted:', registerData);
     const response = await fetch('https://edulearn-hn19.onrender.com/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -120,6 +135,7 @@ const Login = () => {
                   {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
                 </div>
                 <button type='submit' onClick={handleLoginSubmit} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Sign In</button>
+                <p className='text-center text-white'>Are you looking to create a Organization? contact <a href="mailto:shashankchowdary09@gmail.com" className="text-blue-200 hover:underline">edulearn</a></p>
               </form>
             )}
 
@@ -156,8 +172,28 @@ const Login = () => {
                     {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
+                <div className="relative">
+                  <List className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 w-5 h-5" />
+                  <select required name="organization" value={registerData.organization_id}
+                    onChange={(e) =>
+                      setRegisterData({
+                        ...registerData, organization_id: e.target.value,
+                      })
+                    } className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                  >
+                    <option value="" disabled>Select Organization</option>
+                    {!loadingOrgs ? (
+                      organizations.map((org) => (
+                        <option key={org.id} value={org.id} style={{ color: 'black' }}>{org.name}</option>
+                      ))
+                    ) : (
+                      <option>Loading...</option>
+                    )}
+                  </select>
+                </div>
                 <div className="flex items-center">{error && <p className="text-red-500 text-sm ml-2">{error}</p>}</div>
                 <button type='submit' onClick={handleRegisterSubmit} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Create Account</button>
+                <p className='text-center text-white'>Are you looking to create a Organization? contact <a href="mailto:shashankchowdary09@gmail.com" className="text-blue-200 hover:underline">edulearn</a></p>
               </form>
             )}
           </div>

@@ -1,7 +1,7 @@
 import { db } from "../index.js";
 export const getAllCourses = async (req, res) => {
   try {
-    const courses = await db.all(`SELECT *, username as instructor  FROM courses left join users on courses.instructor_id = users.id`);
+    const courses = await db.all(`SELECT *, username as instructor, courses.id as id  FROM courses left join users on courses.instructor_id = users.id WHERE courses.organization_id = ?`, [req.user.organization_id]);
     res.status(200).json({ status: "success", details: courses });
   } catch (error) {
     console.error("Error fetching courses:", error);
@@ -51,7 +51,7 @@ export const createCourse = async (req, res) => {
   }
 
   const result = await db.run(
-    `INSERT INTO courses (title, description, category, instructor_id, level, created_by) VALUES ('${title}', '${description}', '${category}', ${instructor_id}, '${level}', ${created_by})`);
+    `INSERT INTO courses (title, description, category, instructor_id, level, created_by, organization_id) VALUES ('${title}', '${description}', '${category}', ${instructor_id}, '${level}', ${created_by}, ${req.user.organization_id})`);
   res.status(200).send({message:"Course created successfully!"});
   await db.run(`UPDATE instructors SET course_id = '${result.lastID}' WHERE id = ${instructor_id}`);
 }
@@ -61,13 +61,13 @@ export const updateCourse = async (req, res) => {
   const { title, description, created_by, instructor_id, category, level } = req.body;
   try {
     const result = await db.run(
-      `UPDATE courses SET title = ?, description = ?, created_by = ?, instructor_id = ?, category = ?, level = ? WHERE course_id = ?`,
+      `UPDATE courses SET title = ?, description = ?, created_by = ?, instructor_id = ?, category = ?, level = ? WHERE id = ?`,
       [title, description, created_by, instructor_id, category, level, id]
     );
     if (result.changes > 0) {
       res.json({message:"Course updated successfully!",details : { id, title, description, created_by, instructor_id, category, level }});
     } else {
-      res.status(404).json({ message: "Course not found" });
+      res.status(404).json({ message: "Course not found" }); 
     }
   } catch (error) {
     console.error("Error updating course:", error);

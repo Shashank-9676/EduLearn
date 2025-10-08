@@ -1,17 +1,74 @@
-  import {Trash2, Eye,Edit } from "lucide-react";
+import { useState } from "react";
+import {Trash2, Eye,Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import {ToastContainer,  toast } from 'react-toastify';
   const CourseCard = ({ course }) => {
     const {userDetails} = useAuth()
     const navigate = useNavigate();
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState({
+    title: course.title,
+    description: course.description,
+  });
+
     const viewDetails  = () => {
-      if(userDetails.id !==course.instructor_id && userDetails.role == "instructor" || course.status == "pending") {
+      if(userDetails.id !== course.instructor_id && userDetails.role == "instructor" || course.status == "pending") {
         toast.error("You don't have access to view this course");
         return;
       }
       navigate(`/course/${course.id}`);
     }
+    const handleDeleteCourse = async () => {
+      try {
+        const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${course.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },credentials:'include',
+        });
+
+        if (response.ok) {
+          toast.error('Course deleted successfully!');
+          window.location.reload();
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.message || 'Failed to delete course');
+        }
+      } catch (error) {
+        console.error('Error deleting course:', error);
+      }
+    };
+
+    // Function to edit a course
+    const handleEditCourse = async (e) => {
+      e.preventDefault();
+      try {
+        const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${course.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials:'include',
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          toast.success('Course updated successfully!');
+          const updatedCourse = await response.json();
+          setFormData({
+            title: updatedCourse.details.title,
+            description: updatedCourse.details.description,
+          });
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.message || 'Failed to update course');
+        }
+      } catch (error) {
+        console.error('Error updating course:', error);
+      }
+    };
+
     const enrollment = async() => {
       const response = await fetch(`https://edulearn-hn19.onrender.com/enrollments/`, {
         method: 'POST',
@@ -48,15 +105,7 @@ import {ToastContainer,  toast } from 'react-toastify';
       {/* Course Content */}
       <div className=" p-6 flex flex-col justify-end mt-auto">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded">
-            {course.category}
-          </span>
-          {/* {course.rating > 0 && (
-            <div className="flex items-center">
-              <Star className="w-4 h-4 text-yellow-400 fill-current" />
-              <span className="text-sm text-gray-600 ml-1">{course.rating}</span>
-            </div>
-          )} */}
+          <span className="text-sm text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded">{course.category}</span>
         </div>
 
         <p className="text-gray-600 text-sm mb-4 h-16 line-clamp-2">{course.description}</p>
@@ -76,10 +125,10 @@ import {ToastContainer,  toast } from 'react-toastify';
             <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" onClick={viewDetails}>
               <Eye className="w-4 h-4" />
             </button>
-            <button className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+            <button className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors" onClick={() => setIsEditing(true)}>
               <Edit className="w-4 h-4" />
             </button>
-            <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+            <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={handleDeleteCourse}>
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
@@ -101,6 +150,45 @@ import {ToastContainer,  toast } from 'react-toastify';
           </div>
           }
       </div>
+      {isEditing && (
+        <div className="fixed inset-0 bg-[#00000080] bg-opacity-40 flex items-center justify-center z-10">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-96">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              Edit Course
+            </h3>
+            <form onSubmit={handleEditCourse} className="space-y-3">
+              <div>
+                <label className="block text-gray-700 mb-1">Title</label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="5"
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-3 mt-4">
+                <button type="button" onClick={() => setIsEditing(false)} className="px-6 py-2 text-gray-600 bg-brown-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+                <button type="submit" className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )};
   export default CourseCard;

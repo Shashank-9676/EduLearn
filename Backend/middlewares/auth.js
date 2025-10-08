@@ -21,13 +21,12 @@ export const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = { id: decoded.user_id, role: decoded.role, username: decoded.username };
+    req.user = { id: decoded.user_id, role: decoded.role, username: decoded.username, organization_id: decoded.organization_id };
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
-
 
 export const rbacMiddleware = (allowedRoles = []) => {
   return (req, res, next) => {

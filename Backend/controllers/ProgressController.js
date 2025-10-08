@@ -76,15 +76,9 @@ export const getCourseProgress = async (req, res) => {
             return res.status(200).send({ users: results });
         } else {
             // User is not instructor, get their own progress
-            const totalLessons = await db.get(
-                'SELECT COUNT(*) as count FROM lessons WHERE course_id = ?',
-                [course_id]
-            );
+            const totalLessons = await db.get('SELECT COUNT(*) as count FROM lessons WHERE course_id = ?', [course_id]);
             const completed = await db.get(
-                `SELECT COUNT(*) as count
-                 FROM lessonprogress lp
-                 JOIN lessons l ON lp.lesson_id = l.lesson_id
-                 WHERE lp.user_id = ? AND l.course_id = ? AND lp.status = '1'`,
+                `SELECT COUNT(*) as count FROM lessonprogress lp JOIN lessons l ON lp.lesson_id = l.lesson_id WHERE lp.user_id = ? AND l.course_id = ? AND lp.status = '1'`,
                 [user_id, course_id]
             );
             const percent = totalLessons.count === 0 ? 0 : Math.round((completed.count / totalLessons.count) * 100);

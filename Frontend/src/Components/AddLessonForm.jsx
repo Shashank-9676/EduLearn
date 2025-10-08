@@ -69,9 +69,7 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
         {/* Form */}
         <form className="space-y-6" onSubmit={handleAddLesson}>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-2 block">
-              Lesson Title *
-            </label>
+            <label className="text-sm font-medium text-gray-700 mb-2 block">Lesson Title *</label>
             <input type="text" name="title" value={newLesson.title} onChange={handleChange} placeholder="Enter lesson title" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
           </div>
 
@@ -89,17 +87,8 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
 
           {/* Action Buttons */}
           <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
-            <button
-              type="button"
-              onClick={() => setShowAddLessonForm(false)}
-              className="px-6 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center"
-            >
+            <button type="button" onClick={() => setShowAddLessonForm(false)} className="px-6 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+            <button type="submit" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center">
               <Save className="w-4 h-4 mr-2" />
               Add Lesson
             </button>

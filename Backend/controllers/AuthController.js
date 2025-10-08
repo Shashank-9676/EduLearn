@@ -4,7 +4,7 @@ import {db} from '../index.js'
 
 export const register = async(req, res) => {
   try {
-    const { username, password, email, user_type = "student", contact } = req.body;
+    const { username, password, email, user_type = "student", contact, organization_id } = req.body;
 
     const existingUser = await db.get(
       `SELECT * FROM users WHERE username = ?`,
@@ -21,8 +21,8 @@ export const register = async(req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
     const response = await db.run(
-      `INSERT INTO users (username, password, email, user_type, contact) VALUES (?, ?, ?, ?, ?)`,
-      [username, hashed, email, user_type, contact]
+      `INSERT INTO users (username, password, email, user_type, contact, organization_id) VALUES (?, ?, ?, ?, ?, ?)`,
+      [username, hashed, email, user_type, contact, organization_id]
     );
 
     res.status(200).json({message: "User created successfully",details: response});
@@ -49,14 +49,14 @@ export const login = async (req, res) => {
     if (!isPasswordMatched) {
       return res.status(400).json({message: "Invalid password"});
     }
-    const jwtToken = jwt.sign({ username: user.username, role: user.user_type,user_id: user.id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const jwtToken = jwt.sign({ username: user.username, role: user.user_type,user_id: user.id,organization_id: user.organization_id }, process.env.JWT_SECRET, { expiresIn: "7d" });
     res.cookie("jwt_token", jwtToken, {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
     maxAge: 24*60*60*1000*7
   });
-
+    user.org_name = await db.get(`SELECT name FROM organizations WHERE id = ?`, [user.organization_id]);
     res.status(200).json({message: "Login success!", token: jwtToken, details :user});
   } catch (err) {
     console.error(err);
@@ -75,7 +75,6 @@ export const changePassword = async (req, res) => {
     if (!user) {
       return res.status(400).json({message: "User not found"});
     }
-
     const isPasswordMatched = await bcrypt.compare(oldPassword, user.password);
     if (!isPasswordMatched) {
       return res.status(400).json({message: "Invalid current password"});
@@ -87,8 +86,7 @@ export const changePassword = async (req, res) => {
 
     const hashed = await bcrypt.hash(newPassword, 10);
     const response = await db.run(`UPDATE users SET password = ? WHERE username = ?`, [
-      hashed,
-      username,
+      hashed,username,
     ]);
 
     res.status(200).json({message: "Password updated", details : response});
@@ -129,7 +127,7 @@ export const getProfile = async (req, res) => {
 
 export const getStudents = async (req, res) => {
   try {
-    const students = await db.all(`SELECT * FROM users WHERE user_type = 'student'`);
+    const students = await db.all(`SELECT * FROM users WHERE user_type = 'student' and organization_id = ?`, [req.user.organization_id]);
     res.json({details: students});
   } catch (err) {
     console.error(err);
@@ -138,7 +136,7 @@ export const getStudents = async (req, res) => {
 }
 export const getInstructors = async (req, res) => {
   try {
-    const instructors = await db.all(`SELECT * FROM users WHERE user_type = 'instructor'`);
+    const instructors = await db.all(`SELECT * FROM users WHERE user_type = 'instructor' and organization_id = ?`, [req.user.organization_id]);
     res.json({details: instructors});
   } catch (err) {
     console.error(err);

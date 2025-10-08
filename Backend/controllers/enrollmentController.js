@@ -1,21 +1,18 @@
-// controllers/enrollmentController.js
-// ES Modules (modern JS)
 import {db} from "../index.js";
 
 const isType = (user, expected) =>
   user && user.user_type && user.user_type.toLowerCase() === expected.toLowerCase();
-
-/* GET /enrollments
-   Return all enrollments with joined user/course/instructor names */
 export const getAllEnrollments = async (req, res) => {
   try {
-    // e.id, e.user_id, u.username AS student_name, e.course_id, c.title AS course_title, e.instructor_id, i.username AS instructor_name, e.enrolled_at, e.status
     const rows = await db.all(
       `SELECT *, e.id, i.username AS instructor_name, u.username AS student_name, u.user_type, u.email AS student_email FROM enrollments e
        LEFT JOIN users u ON e.user_id = u.id
        LEFT JOIN courses c ON e.course_id = c.id
        LEFT JOIN users i ON e.instructor_id = i.id
-       ORDER BY e.enrolled_at DESC`);
+       WHERE u.organization_id = ?
+       ORDER BY e.enrolled_at DESC`,
+      [req.user.organization_id]
+    );
     return res.json({details : rows});
   } catch (err) {
     console.error("getAllEnrollments:", err);

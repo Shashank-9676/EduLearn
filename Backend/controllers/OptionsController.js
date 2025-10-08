@@ -38,3 +38,12 @@ export const getEnrollmentOptions = async (req, res) => {
   }
 };
 
+export const getOrganizationOptions = async (req, res) => {
+  try {
+    const organizations = await db.all("SELECT id, name FROM organizations");
+    res.json({ details : organizations });
+  } catch (error) {
+    console.error("Error fetching organization options:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};

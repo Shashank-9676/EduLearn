@@ -9,8 +9,8 @@ export const createLesson = async(req, res) => {
   }
 
   await db.run(
-    `INSERT INTO lessons (course_id, title, content_url, created_by, lesson_order) VALUES (?, ?, ?, ?, ?)`,
-    [courseId, title, content_url, created_by, lesson_order]
+    `INSERT INTO lessons (course_id, title, content_url, created_by, lesson_order, organization_id) VALUES (?, ?, ?, ?, ?, ?)`,
+    [courseId, title, content_url, created_by, lesson_order, req.user.organization_id]
   );
 
   res.status(201).json({message:"Lesson created successfully", details: { courseId, title, content_url, created_by, lesson_order } });

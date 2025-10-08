@@ -25,7 +25,6 @@ import { toast, ToastContainer } from "react-toastify";
     }
     return(
       <>
-      <ToastContainer />
       <tr className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">

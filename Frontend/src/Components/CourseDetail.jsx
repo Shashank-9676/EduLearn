@@ -184,7 +184,7 @@ const CourseDetail = () => {
             {lessons.length > 0 ? (
               <div className="space-y-4">
                 {lessons.map((lesson) => (
-                  <LessonCard key={lesson.id} lesson={lesson} />
+                  <LessonCard key={lesson.lesson_id} lesson={lesson} />
                 ))}
               </div>
             ) : (
