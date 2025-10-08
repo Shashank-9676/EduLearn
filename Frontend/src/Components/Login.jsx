@@ -20,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
-      const res = await fetch('http://localhost:3000/form/organization-options', {credentials:'include'});
+      const res = await fetch('https://edulearn-hn19.onrender.com/form/organization-options', {credentials:'include'});
       const data = await res.json();
       setOrganizations(data.details || []);
       } catch (err) {

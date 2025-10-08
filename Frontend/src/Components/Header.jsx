@@ -50,7 +50,7 @@ const Header = () => {
             <div className="flex items-center space-x-3">
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-xl"><GraduationCap className="w-8 h-8 text-white" /></div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">EduLearn</h1>
+                <h1 className="text-xl font-bold text-gray-900">{userDetails.org_name ?? 'Edulearn'}</h1>
                 <p className="text-xs text-gray-500 hidden sm:block">Learning Management System</p>
               </div>
             </div>
