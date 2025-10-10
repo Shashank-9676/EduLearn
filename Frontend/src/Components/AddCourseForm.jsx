@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, BookOpen, Save, Upload } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-const CreateCourse = ({ isOpen, onClosed, onSave }) => {
+const CreateCourse = ({ isOpen, onClose, onSave }) => {
   const {userDetails} = useAuth()
   const [formData, setFormData] = useState({
     title: '',
@@ -33,7 +33,8 @@ const CreateCourse = ({ isOpen, onClosed, onSave }) => {
 
   const levelOptions = ['Beginner', 'Intermediate', 'Advanced'];
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (!formData.title || !formData.description || !formData.category || !formData.instructor_id || !formData.level) {
       setError('Please fill all required fields');
       return;
@@ -42,7 +43,7 @@ const CreateCourse = ({ isOpen, onClosed, onSave }) => {
     setFormData({
       title: '', description: '', category: '', instructor_id: '', level: '', status: 'draft'
     });
-    onClosed();
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -57,28 +58,22 @@ const CreateCourse = ({ isOpen, onClosed, onSave }) => {
             <BookOpen className="w-6 h-6 text-blue-600" />
             <h2 className="text-2xl font-bold text-gray-900">Create New Course</h2>
           </div>
-          <button onClick={onClosed} className="text-gray-500 hover:text-gray-700">
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Form */}
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Course Title *</label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => setFormData({...formData, title: e.target.value})}
-              placeholder="Enter course title"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor='title'>Course Title *</label>
+            <input required name='title' id='title' type="text" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Enter course title" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
-            <textarea rows={4} value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Describe the course content" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"/>
+            <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor='description'>Description *</label>
+            <textarea required id='description' rows={4} value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Describe the course content" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"/>
           </div>
 
           {/* Two Column Layout */}
@@ -96,7 +91,7 @@ const CreateCourse = ({ isOpen, onClosed, onSave }) => {
             {/* Instructor */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Instructor *</label>
-              <select value={formData.instructor_id} onChange={(e) => setFormData({...formData, instructor_id: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select required value={formData.instructor_id} onChange={(e) => setFormData({...formData, instructor_id: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select instructor</option>
                 {instructorOptions.map((instructor) => (
                   <option key={instructor.value} value={instructor.value}>
@@ -109,7 +104,7 @@ const CreateCourse = ({ isOpen, onClosed, onSave }) => {
             {/* Level */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Level *</label>
-              <select value={formData.level} onChange={(e) => setFormData({...formData, level: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select required value={formData.level} onChange={(e) => setFormData({...formData, level: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select level</option>
                 {levelOptions.map((level) => (
                   <option key={level} value={level}>{level}</option>
@@ -120,9 +115,9 @@ const CreateCourse = ({ isOpen, onClosed, onSave }) => {
             {error && <p className="text-red-500 text-sm">{error}</p>}
           {/* Action Buttons */}
           <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
-            <button onClick={onClosed} className="px-6 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <button type='button' onClick={onClose} className="px-6 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
               Cancel</button>
-            <button onClick={handleSubmit}className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all flex items-center"><Save className="w-4 h-4 mr-2" />Create Course</button>
+            <button type="submit" className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all flex items-center"><Save className="w-4 h-4 mr-2" />Create Course</button>
           </div>
         </form>
       </div>

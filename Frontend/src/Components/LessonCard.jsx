@@ -24,7 +24,7 @@ import { toast, ToastContainer } from 'react-toastify';
   const handleEditLesson = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${lesson.course_id}/lessons/${lesson.lesson_id}`, {
+      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/lessons/${lesson.lesson_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -46,7 +46,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
   const handleDeleteLesson = async () => {
     try {
-      const response = await fetch(`https://edulearn-hn19.onrender.com/lessons/${lesson.lesson_id}`, {
+      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/lessons/${lesson.lesson_id}`, {
         method: "DELETE",
         credentials: "include",
       });

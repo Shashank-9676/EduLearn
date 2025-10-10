@@ -34,8 +34,8 @@ const StudentProgress = () => {
 
     fetchCourseProgress();
   }, [id]);
-
-  const filteredStudents = students.filter(student => 
+  
+    const filteredStudents = students?.filter(student => 
     student.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -63,7 +63,9 @@ const StudentProgress = () => {
 
   const StudentProgressCard = ({ student }) => {
     const status = getStatusBadge(student.percent);
-    
+    if (!students) {
+    return <div>No data found</div>;
+  }
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
         <div className="flex items-start justify-between mb-4">

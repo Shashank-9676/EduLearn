@@ -2,7 +2,7 @@ import {db} from '../index.js';
 
 export const getAllInstructors = async (req, res) => {
     try {
-        const instructors = await db.all(`SELECT *,i.id as id  FROM Instructors i left join users on i.instructor_id = users.id`);
+        const instructors = await db.all(`SELECT *,i.id as id  FROM Instructors i left join users on i.instructor_id = users.id where users.organization_id = ?`, [req.user.organization_id]);
         res.json({ details: instructors }); 
     } catch (err) {
         console.error(err);

@@ -130,9 +130,8 @@ const Login = () => {
                   </button>
                 </div>
 
-                <div className="text-right">
-                  <button type="button" className="text-blue-200 hover:text-white transition-colors text-sm">Forgot Password?</button>
-                  {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                <div className="text-left">
+                  {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
                 </div>
                 <button type='submit' onClick={handleLoginSubmit} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Sign In</button>
                 <p className='text-center text-white'>Are you looking to create a Organization? contact <a href="mailto:shashankchowdary09@gmail.com" className="text-blue-200 hover:underline">edulearn</a></p>

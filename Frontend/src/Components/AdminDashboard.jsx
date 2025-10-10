@@ -51,7 +51,7 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
       console.error("Error fetching enrollments:", error);
     }
   };
-  console.log(pendingEnrollments);
+  // console.log(pendingEnrollments);
   useEffect(() => {
     fetchEnrollmentsCounts();
     fetchEnrollments();

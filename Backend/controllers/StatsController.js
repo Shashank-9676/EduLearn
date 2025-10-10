@@ -1,10 +1,10 @@
 import { db } from "../index.js";
 export const getAdminStats = async (req, res) => {
   try {
-    const totalUsersRow = await db.get(`SELECT COUNT(*) AS count FROM enrollments`);
-    const totalCoursesRow = await db.get(`SELECT COUNT(*) AS count FROM courses`);
-    const activeUsersRow = await db.get(`SELECT COUNT(*) AS count FROM enrollments WHERE status = 'active'`);
-    const pendingEnrollmentsRow = await db.get(`SELECT COUNT(*) AS count FROM enrollments WHERE status = 'pending'`);
+    const totalUsersRow = await db.get(`SELECT COUNT(distinct user_id) AS count FROM enrollments where organization_id = ?`, [req.user.organization_id]);
+    const totalCoursesRow = await db.get(`SELECT COUNT(*) AS count FROM courses where organization_id = ?`, [req.user.organization_id]);
+    const activeUsersRow = await db.get(`SELECT COUNT(distinct user_id) AS count FROM enrollments WHERE status = 'active' and organization_id = ?`, [req.user.organization_id]);
+    const pendingEnrollmentsRow = await db.get(`SELECT COUNT(*) AS count FROM enrollments WHERE status = 'pending' and organization_id = ?`, [req.user.organization_id]);
 
     const stats = {
       totalUsers: totalUsersRow.count,

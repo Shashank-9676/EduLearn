@@ -28,7 +28,7 @@ export const getLessonsByCourse = async (req, res) => {
 export const getLessonById = async (req, res) => {
   const { id } = req.params;
 
-  const lesson = await db.get(`SELECT * FROM lessons WHERE id = ?`, [id]);
+  const lesson = await db.get(`SELECT * FROM lessons WHERE lesson_id = ?`, [id]);
   if (!lesson) return res.status(404).json({ message: "Lesson not found" });
   res.json({details:lesson});
 };
@@ -36,11 +36,11 @@ export const getLessonById = async (req, res) => {
 // Update a lesson
 export const updateLesson = async (req, res) => {
   const { id } = req.params;
-  const { title, content_url,lesson_order } = req.body;
+  const { title, content_url } = req.body;
 
   await db.run(
-    `UPDATE lessons SET title = ?, content_url = ?, lesson_order = ? WHERE id = ?`,
-    [title, content_url, lesson_order, id]
+    `UPDATE lessons SET title = ?, content_url = ? WHERE lesson_id = ?`,
+    [title, content_url, id]
   );
 
   const changes = db.changes;
@@ -52,7 +52,7 @@ export const updateLesson = async (req, res) => {
 export const deleteLesson = async (req, res) => {
   const { id } = req.params;
 
-  await db.run(`DELETE FROM lessons WHERE id = ?`, [id]);
+  await db.run(`DELETE FROM lessons WHERE lesson_id = ?`, [id]);
 
   const changes = db.changes;
   if (changes === 0) return res.status(404).json({ message: "Lesson not found" });

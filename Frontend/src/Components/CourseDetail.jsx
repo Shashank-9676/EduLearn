@@ -42,7 +42,7 @@ const CourseDetail = () => {
       if (response.ok){
         const data = await response.json()
         setProgress(data.details?.percent)
-        console.log(data)
+        // console.log(data)
       }
     } catch (error) {
       toast.error("Error fetching Progress data")
@@ -60,7 +60,7 @@ const CourseDetail = () => {
       if (response.ok) {
         const data = await response.json();
         setCourseData(data.details);
-        console.log(data)
+        // console.log(data)
       } else {
         console.error('Failed to fetch course data');
       }
@@ -167,9 +167,9 @@ const CourseDetail = () => {
             <h2 className="text-xl font-semibold text-gray-900 mb-3">Course Description</h2>
           <p className="text-gray-600">{courseData.description}</p>
           </div>
-          <Link to={`/progress/${id}`}>
+          {stats?.enrolledStudents > 0 && <Link to={`/progress/${id}`}>
             <button className='bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg'>Students Progress</button>
-          </Link>
+          </Link>}
         </div>
 
         {/* Lessons List */}

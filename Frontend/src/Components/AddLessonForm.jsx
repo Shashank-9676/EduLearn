@@ -70,7 +70,7 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
         <form className="space-y-6" onSubmit={handleAddLesson}>
           <div>
             <label className="text-sm font-medium text-gray-700 mb-2 block">Lesson Title *</label>
-            <input type="text" name="title" value={newLesson.title} onChange={handleChange} placeholder="Enter lesson title" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            <input required type="text" name="title" value={newLesson.title} onChange={handleChange} placeholder="Enter lesson title" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
           </div>
 
           {/* Type and Duration */}
@@ -81,7 +81,7 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Content Code *</label>
-              <input type="text" name="content_url" value={newLesson.content_url} onChange={handleChange} placeholder="Enter content URL Code" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input required type="text" name="content_url" value={newLesson.content_url} onChange={handleChange} placeholder="Enter content URL Code" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
           </div>
 

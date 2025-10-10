@@ -33,7 +33,7 @@ const Courses = () => {
       return;
     }
     const data = await response.json();
-    toast.error(data.message || "Course created successfully!")
+    toast.success(data.message || "Course created successfully!")
     fetchCourses();
   };
 

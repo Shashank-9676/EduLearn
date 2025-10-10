@@ -61,11 +61,11 @@ export const updateCourse = async (req, res) => {
   const { title, description, created_by, instructor_id, category, level } = req.body;
   try {
     const result = await db.run(
-      `UPDATE courses SET title = ?, description = ?, created_by = ?, instructor_id = ?, category = ?, level = ? WHERE id = ?`,
-      [title, description, created_by, instructor_id, category, level, id]
+      `UPDATE courses SET title = ?, description = ? WHERE id = ?`,
+      [title, description, id]
     );
     if (result.changes > 0) {
-      res.json({message:"Course updated successfully!",details : { id, title, description, created_by, instructor_id, category, level }});
+      res.json({message:"Course updated successfully!",details : { id, title, description }});
     } else {
       res.status(404).json({ message: "Course not found" }); 
     }
@@ -78,7 +78,7 @@ export const updateCourse = async (req, res) => {
 export const deleteCourse = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await db.run(`DELETE FROM courses WHERE course_id = ?`, [id]);
+    const result = await db.run(`DELETE FROM courses WHERE id = ?`, [id]);
     if (result.changes > 0) {
       res.json({message : "Course deleted successfully"});
     } else {
@@ -94,7 +94,7 @@ export const deleteCourse = async (req, res) => {
 export const getCourseById = async (req, res) => {
   const { id } = req.params;
   try {
-    const course = await db.get(`SELECT *, username as instructor  FROM courses left join users on courses.instructor_id = users.id WHERE courses.id = ${id}`);
+    const course = await db.get(`SELECT *,courses.id as id, username as instructor  FROM courses left join users on courses.instructor_id = users.id WHERE courses.id = ${id}`);
     if (course) {
       res.json({details : course});
     } else {

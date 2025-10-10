@@ -24,7 +24,7 @@ export const register = async(req, res) => {
       `INSERT INTO users (username, password, email, user_type, contact, organization_id) VALUES (?, ?, ?, ?, ?, ?)`,
       [username, hashed, email, user_type, contact, organization_id]
     );
-
+    console.log(response)
     res.status(200).json({message: "User created successfully",details: response});
   } catch (err) {
     console.error(err);
