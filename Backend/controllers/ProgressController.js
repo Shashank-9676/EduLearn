@@ -1,14 +1,15 @@
-import {db} from '../index.js';
+import { db } from '../index.js';
+
 export const addProgress = async (req, res) => {
-    try{
+    try {
         const { user_id, lesson_id, status } = req.body;
-        if (!user_id || !lesson_id || !status) {
+        if (user_id === undefined || lesson_id === undefined || status === undefined) {
             return res.status(400).send({ message: 'Missing required fields' });
         }
-        await db.run(
-            'INSERT INTO lessonprogress (user_id, lesson_id, status) VALUES (?, ?, ?)',
-            [user_id, lesson_id, status]
-        );
+        await db.execute({
+            sql: 'INSERT INTO LessonProgress (user_id, lesson_id, status) VALUES (?, ?, ?)',
+            args: [user_id, lesson_id, status]
+        });
         res.status(201).send({ message: 'Progress added successfully' });
     } catch (error) {
         console.error('Error adding progress:', error);
@@ -17,77 +18,94 @@ export const addProgress = async (req, res) => {
         }
         res.status(500).send({ message: 'Internal server error' });
     }
-}
+};
+
 export const getProgressByUser = async (req, res) => {
     try {
         const { user_id, lesson_id } = req.params;
-        const progress = await db.get('SELECT * FROM lessonprogress WHERE user_id = ? AND lesson_id = ?', [user_id, lesson_id]);
-        res.status(200).send({ details: progress });
+        const result = await db.execute({
+            sql: 'SELECT * FROM LessonProgress WHERE user_id = ? AND lesson_id = ?',
+            args: [user_id, lesson_id]
+        });
+        res.status(200).send({ details: result.rows[0] || null });
     } catch (error) {
         console.error('Error fetching progress:', error);
         res.status(500).send({ message: 'Internal server error' });
     }
-}
+};
 
 export const getCourseProgress = async (req, res) => {
     try {
         const { user_id, course_id } = req.params;
-        // Check if user is instructor for the course
-        const instructor = await db.get(
-            'SELECT instructor_id FROM courses WHERE id = ?',
-            [course_id]
-        );
-        if (!instructor) {
+
+        // Get the course and its instructor
+        const courseResult = await db.execute({
+            sql: 'SELECT instructor_id FROM Courses WHERE id = ?',
+            args: [course_id]
+        });
+
+        if (courseResult.rows.length === 0) {
             return res.status(404).send({ message: 'Course not found' });
         }
+        const course = courseResult.rows[0];
 
-        if (instructor.instructor_id === Number(user_id)) {
-            // User is instructor, get progress for all enrolled users
-            const users = await db.all(
-                `SELECT u.id, u.username, u.email
-                 FROM users u
-                 JOIN enrollments e ON u.id = e.user_id
-                 WHERE e.course_id = ?`,
-                [course_id]
-            );
-            const totalLessons = await db.get(
-                'SELECT COUNT(*) as count FROM lessons WHERE course_id = ?',
-                [course_id]
-            );
-            const results = [];
-            for (const user of users) {
-                const completed = await db.get(
-                    `SELECT COUNT(*) as count
-                     FROM lessonprogress lp
-                     JOIN lessons l ON lp.lesson_id = l.lesson_id
-                     WHERE lp.user_id = ? AND l.course_id = ?`,
-                    [user.id, course_id]
-                );
-                const percent = totalLessons.count === 0 ? 0 : Math.round((completed.count / totalLessons.count) * 100);
-                results.push({
-                    user_id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    completed: completed.count,
-                    total: totalLessons.count,
-                    percent
-                });
-            }
-            return res.status(200).send({ users: results });
+        // Get the total number of lessons for the course
+        const totalLessonsResult = await db.execute({
+            sql: 'SELECT COUNT(*) as count FROM Lessons WHERE course_id = ?',
+            args: [course_id]
+        });
+        const totalLessons = totalLessonsResult.rows[0].count;
+
+        // Check if the current user is the instructor for this course
+        if (course.instructor_id === Number(user_id)) {
+            // User is the instructor, get progress for all enrolled students
+            const progressResult = await db.execute({
+                sql: `
+                    SELECT 
+                        u.id as user_id,
+                        u.username,
+                        u.email,
+                        COUNT(lp.progress_id) as completed
+                    FROM enrollments e
+                    JOIN users u ON e.user_id = u.id
+                    LEFT JOIN LessonProgress lp ON u.id = lp.user_id AND lp.status = 1
+                    LEFT JOIN Lessons l ON lp.lesson_id = l.lesson_id AND l.course_id = e.course_id
+                    WHERE e.course_id = ?
+                    GROUP BY u.id, u.username, u.email
+                `,
+                args: [course_id]
+            });
+
+            const usersProgress = progressResult.rows.map(user => ({
+                ...user,
+                total: totalLessons,
+                percent: totalLessons === 0 ? 0 : Math.round((user.completed / totalLessons) * 100)
+            }));
+            
+            return res.status(200).send({ users: usersProgress });
         } else {
-            // User is not instructor, get their own progress
-            const totalLessons = await db.get('SELECT COUNT(*) as count FROM lessons WHERE course_id = ?', [course_id]);
-            const completed = await db.get(
-                `SELECT COUNT(*) as count FROM lessonprogress lp JOIN lessons l ON lp.lesson_id = l.lesson_id WHERE lp.user_id = ? AND l.course_id = ? AND lp.status = '1'`,
-                [user_id, course_id]
-            );
-            const percent = totalLessons.count === 0 ? 0 : Math.round((completed.count / totalLessons.count) * 100);
-            return res.status(200).send({details : {
-                user_id: Number(user_id),
-                completed: completed.count,
-                total: totalLessons.count,
-                percent
-            }});
+            // User is a student, get their own progress
+            const completedResult = await db.execute({
+                sql: `
+                    SELECT COUNT(*) as count 
+                    FROM LessonProgress lp 
+                    JOIN Lessons l ON lp.lesson_id = l.lesson_id 
+                    WHERE lp.user_id = ? AND l.course_id = ? AND lp.status = 1
+                `,
+                args: [user_id, course_id]
+            });
+            const completedCount = completedResult.rows[0].count;
+
+            const percent = totalLessons === 0 ? 0 : Math.round((completedCount / totalLessons) * 100);
+            
+            return res.status(200).send({
+                details: {
+                    user_id: Number(user_id),
+                    completed: completedCount,
+                    total: totalLessons,
+                    percent
+                }
+            });
         }
     } catch (error) {
         console.error('Error fetching course progress:', error);

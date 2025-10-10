@@ -1,73 +1,111 @@
 import { db } from "../index.js";
+
 export const getAdminStats = async (req, res) => {
   try {
-    const totalUsersRow = await db.get(`SELECT COUNT(distinct user_id) AS count FROM enrollments where organization_id = ?`, [req.user.organization_id]);
-    const totalCoursesRow = await db.get(`SELECT COUNT(*) AS count FROM courses where organization_id = ?`, [req.user.organization_id]);
-    const activeUsersRow = await db.get(`SELECT COUNT(distinct user_id) AS count FROM enrollments WHERE status = 'active' and organization_id = ?`, [req.user.organization_id]);
-    const pendingEnrollmentsRow = await db.get(`SELECT COUNT(*) AS count FROM enrollments WHERE status = 'pending' and organization_id = ?`, [req.user.organization_id]);
+    // Run all count queries in parallel for better performance
+    const [
+      totalUsersResult,
+      totalCoursesResult,
+      activeUsersResult,
+      pendingEnrollmentsResult
+    ] = await Promise.all([
+      db.execute({
+        sql: `SELECT COUNT(DISTINCT user_id) AS count FROM enrollments WHERE organization_id = ?`,
+        args: [req.user.organization_id]
+      }),
+      db.execute({
+        sql: `SELECT COUNT(*) AS count FROM Courses WHERE organization_id = ?`,
+        args: [req.user.organization_id]
+      }),
+      db.execute({
+        sql: `SELECT COUNT(DISTINCT user_id) AS count FROM enrollments WHERE status = 'active' AND organization_id = ?`,
+        args: [req.user.organization_id]
+      }),
+      db.execute({
+        sql: `SELECT COUNT(*) AS count FROM enrollments WHERE status = 'pending' AND organization_id = ?`,
+        args: [req.user.organization_id]
+      })
+    ]);
 
     const stats = {
-      totalUsers: totalUsersRow.count,
-      totalCourses: totalCoursesRow.count,
-      activeUsers: activeUsersRow.count,
-      pendingEnrollments: pendingEnrollmentsRow.count
+      totalUsers: totalUsersResult.rows[0].count,
+      totalCourses: totalCoursesResult.rows[0].count,
+      activeUsers: activeUsersResult.rows[0].count,
+      pendingEnrollments: pendingEnrollmentsResult.rows[0].count
     };
 
-    res.json({details: stats});
+    res.json({ details: stats });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({message: "Error fetching statistics"});
+    console.error("Error fetching admin statistics:", err);
+    res.status(500).json({ message: "Error fetching statistics" });
   }
-}
+};
 
-export const getInstructorStats = async(req,res) => {
-    const instructorId = req.params.id;
-    try {
-      const totalCoursesRow = await db.get(`SELECT COUNT(*) AS count FROM courses WHERE instructor_id = ?`, [instructorId]);
-      const totalStudentsRow = await db.get(`SELECT COUNT(DISTINCT user_id) AS count FROM enrollments WHERE course_id IN (SELECT id FROM courses WHERE instructor_id = ?)`, [instructorId]);
-    //   const activeCoursesRow = await db.get(`SELECT COUNT(*) AS count FROM courses WHERE instructor_id = ? AND status = 'active'`, [instructorId]);
-    //   const completedCoursesRow = await db.get(`SELECT COUNT(*) AS count FROM courses WHERE instructor_id = ? AND status = 'completed'`, [instructorId]);
+export const getInstructorStats = async (req, res) => {
+  const instructorId = req.params.id;
+  try {
+    const [totalCoursesResult, totalStudentsResult] = await Promise.all([
+      db.execute({
+        sql: `SELECT COUNT(*) AS count FROM Courses WHERE instructor_id = ?`,
+        args: [instructorId]
+      }),
+      db.execute({
+        sql: `SELECT COUNT(DISTINCT student_id) AS count FROM enrollments WHERE course_id IN (SELECT id FROM Courses WHERE instructor_id = ?)`,
+        args: [instructorId]
+      })
+    ]);
 
-      const stats = {
-        totalCourses: totalCoursesRow.count,
-        totalStudents: totalStudentsRow.count,
-        // activeCourses: activeCoursesRow.count,
-        // completedCourses: completedCoursesRow.count
-      };
+    const stats = {
+      totalCourses: totalCoursesResult.rows[0].count,
+      totalStudents: totalStudentsResult.rows[0].count,
+    };
 
-      res.json({details: stats});
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({message: "Error fetching instructor statistics"});
-    }
-}
+    res.json({ details: stats });
+  } catch (err) {
+    console.error("Error fetching instructor statistics:", err);
+    res.status(500).json({ message: "Error fetching instructor statistics" });
+  }
+};
 
-export const getStudentStats = async(req,res) => {
-    const studentId = req.params.id;
-    try {
-      const totalCoursesRow = await db.get(`SELECT COUNT(*) AS count FROM enrollments WHERE user_id = ?`, [studentId]);
-      const stats = {
-        totalCourses: totalCoursesRow.count,
-      };
-      res.json({details: stats});
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({message: "Error fetching student statistics"});
-    }
-}
+export const getStudentStats = async (req, res) => {
+  const studentId = req.params.id;
+  try {
+    const totalCoursesResult = await db.execute({
+      sql: `SELECT COUNT(*) AS count FROM enrollments WHERE student_id = ?`,
+      args: [studentId]
+    });
 
-export const getLessonStats = async(req,res) => {
-    const courseId = req.params.id;
-    try {
-        const totalLessonsRow = await db.get(`SELECT COUNT(*) AS count FROM lessons WHERE course_id = ?`, [courseId]);
-        const enrolledStudentsRow = await db.get(`SELECT COUNT(DISTINCT user_id) AS count FROM enrollments WHERE course_id = ? AND status = 'active'`, [courseId]);
-        const stats = {
-            totalLessons: totalLessonsRow.count,
-            enrolledStudents: enrolledStudentsRow.count
-        };
-        res.json({details: stats});
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({message: "Error fetching lesson statistics"});
-    }
-}
+    const stats = {
+      totalCourses: totalCoursesResult.rows[0].count,
+    };
+    res.json({ details: stats });
+  } catch (err) {
+    console.error("Error fetching student statistics:", err);
+    res.status(500).json({ message: "Error fetching student statistics" });
+  }
+};
+
+export const getLessonStats = async (req, res) => {
+  const courseId = req.params.id;
+  try {
+    const [totalLessonsResult, enrolledStudentsResult] = await Promise.all([
+        db.execute({
+            sql: `SELECT COUNT(*) AS count FROM Lessons WHERE course_id = ?`,
+            args: [courseId]
+        }),
+        db.execute({
+            sql: `SELECT COUNT(DISTINCT student_id) AS count FROM enrollments WHERE course_id = ? AND status = 'active'`,
+            args: [courseId]
+        })
+    ]);
+
+    const stats = {
+      totalLessons: totalLessonsResult.rows[0].count,
+      enrolledStudents: enrolledStudentsResult.rows[0].count
+    };
+    res.json({ details: stats });
+  } catch (err) {
+    console.error("Error fetching lesson statistics:", err);
+    res.status(500).json({ message: "Error fetching lesson statistics" });
+  }
+};

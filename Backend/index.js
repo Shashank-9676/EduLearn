@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
-import sqlite3 from "sqlite3";
-import { open } from "sqlite";
+import { createClient } from '@libsql/client';
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv'
 import cors from 'cors'
@@ -40,21 +39,15 @@ app.use(
   })
 );
 
-const initializeDB = async () => {
-  try {
-    db = await open({
-      filename: path.join(__dirname, "lms.db"),
-      driver: sqlite3.Database,
-    });
-      
-    app.listen(3000, () => {
-      console.log("Server is running on http://localhost:3000");
-    });
-  } catch (err) {
-    console.error("DB Error:", err);
-  }
-};
-initializeDB();
+db = createClient({
+  url: process.env.TURSO_DATABASE_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
+});
+
+app.listen(3000, () => {
+  console.log("Server is running on http://localhost:3000");
+});
+
 app.use('/api/', authRoutes);
 app.use('/courses/', courseRoutes);
 app.use('/enrollments/', enrollmentRoute);
