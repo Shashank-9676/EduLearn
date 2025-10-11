@@ -72,7 +72,8 @@ const Login = () => {
         username: registerData.username,
         email: registerData.email,
         contact: registerData.contact,
-        password: registerData.password
+        password: registerData.password,
+        organization_id: registerData.organization_id,
       })
     });
     const data = await response.json();

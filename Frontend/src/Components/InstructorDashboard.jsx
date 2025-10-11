@@ -15,6 +15,7 @@ const InstructorDashboard = () => {
         credentials:'include',
       });
       const data = await response.json();
+      console.log("My Courses Data:", data);
       setMyCourses(data.details);
     } catch (error) {
       toast.error("Error fetching courses")
@@ -36,7 +37,7 @@ const InstructorDashboard = () => {
     fetchInstructorStats();
  },[])
 
-  if (!instructorStats || myCourses.length === 0) {
+  if (myCourses.length === 0) {
     return <EmptyView />;
   }
   return (
@@ -58,8 +59,8 @@ const InstructorDashboard = () => {
         
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard icon={BookOpen} title="Assigned Courses" value={instructorStats.totalCourses} color="bg-blue-500" />     
-          <StatCard icon={Users} title="Total Students" value={instructorStats.totalStudents} color="bg-green-500" />
+          <StatCard icon={BookOpen} title="Assigned Courses" value={instructorStats?.totalCourses} color="bg-blue-500" />     
+          <StatCard icon={Users} title="Total Students" value={instructorStats?.totalStudents} color="bg-green-500" />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8"> 
           {/* My Courses */}

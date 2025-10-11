@@ -50,7 +50,7 @@ export const getInstructorStats = async (req, res) => {
         args: [instructorId]
       }),
       db.execute({
-        sql: `SELECT COUNT(DISTINCT student_id) AS count FROM enrollments WHERE course_id IN (SELECT id FROM Courses WHERE instructor_id = ?)`,
+        sql: `SELECT COUNT(DISTINCT user_id) AS count FROM enrollments WHERE course_id IN (SELECT id FROM Courses WHERE instructor_id = ?)`,
         args: [instructorId]
       })
     ]);
@@ -71,7 +71,7 @@ export const getStudentStats = async (req, res) => {
   const studentId = req.params.id;
   try {
     const totalCoursesResult = await db.execute({
-      sql: `SELECT COUNT(*) AS count FROM enrollments WHERE student_id = ?`,
+      sql: `SELECT COUNT(*) AS count FROM enrollments WHERE user_id = ?`,
       args: [studentId]
     });
 
@@ -94,7 +94,7 @@ export const getLessonStats = async (req, res) => {
             args: [courseId]
         }),
         db.execute({
-            sql: `SELECT COUNT(DISTINCT student_id) AS count FROM enrollments WHERE course_id = ? AND status = 'active'`,
+            sql: `SELECT COUNT(DISTINCT user_id) AS count FROM enrollments WHERE course_id = ? AND status = 'active'`,
             args: [courseId]
         })
     ]);

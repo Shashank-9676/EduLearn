@@ -24,11 +24,15 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
       return [];
     }
   };
-  useEffect(() => {fetchInstructors()}, []);
+  useEffect(() => {
+    if(userDetails.role == "admin") {
+    fetchInstructors()
+    }
+  }, []);
 
   const categoryOptions = [
-    'Web Development', 'Mobile Development', 'Data Science', 
-    'Machine Learning', 'UI/UX Design', 'Database Management'
+    'Web Development', 'Mobile Development',  
+    'Machine Learning', 'UI/UX Design', 'Database Management', "Programming Languages"
   ];
 
   const levelOptions = ['Beginner', 'Intermediate', 'Advanced'];
@@ -39,9 +43,11 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
       setError('Please fill all required fields');
       return;
     }
+    console.log("Submitting form data:", formData);
+    setError(null);
     onSave(formData);
     setFormData({
-      title: '', description: '', category: '', instructor_id: '', level: '', status: 'draft'
+      title: '', description: '', category: '', instructor_id: '', level: '', status: 'draft', created_by : userDetails.id
     });
     onClose();
   };

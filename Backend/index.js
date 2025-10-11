@@ -1,7 +1,5 @@
 import express from "express";
-import path from "path";
 import { createClient } from '@libsql/client';
-import { fileURLToPath } from "url";
 import dotenv from 'dotenv'
 import cors from 'cors'
 import cookieParser from "cookie-parser";
@@ -12,8 +10,6 @@ import formRoutes from './Routes/OptionsRoutes.js'
 import instructorRoutes from './Routes/instructor.js'
 import StatsRoute from './Routes/StatsRoute.js'
 import ProgressRoute from './Routes/ProgressRoute.js'
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 dotenv.config();
 let db = null;
 const app = express();

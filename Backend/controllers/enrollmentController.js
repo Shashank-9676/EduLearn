@@ -67,16 +67,16 @@ export const getEnrollmentById = async (req, res) => {
 };
 
 export const createEnrollment = async (req, res) => {
-  const { student_id, course_id, status = "pending" } = req.body;
+  const { user_id, course_id, status = "pending" } = req.body;
 
-  if (!student_id || !course_id) {
+  if (!user_id || !course_id) {
     return res.status(400).json({ message: "Enter required Fields" });
   }
 
   try {
     const studentResult = await db.execute({
         sql: `SELECT * FROM users WHERE id = ?`,
-        args: [student_id]
+        args: [user_id]
     });
     if (studentResult.rows.length === 0) return res.status(400).json({ message: "User not found" });
 
@@ -90,15 +90,15 @@ export const createEnrollment = async (req, res) => {
 
     const result = await db.execute({
       sql: `
-        INSERT INTO enrollments (student_id, course_id, enrollment_date, status)
+        INSERT INTO enrollments (user_id, course_id, enrollment_date, status)
         VALUES (?, ?, CURRENT_TIMESTAMP, ?)
       `,
-      args: [student_id, course_id, status],
+      args: [user_id, course_id, status],
     });
 
     return res.status(201).json({
       id: result.lastInsertRowid,
-      student_id,
+      user_id: user_id,
       course_id,
       instructor_id: course.instructor_id,
       status,

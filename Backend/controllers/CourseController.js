@@ -68,19 +68,29 @@ export const createCourse = async (req, res) => {
 
     const result = await db.execute({
       sql: `
-        INSERT INTO courses (name, description, category, instructor_id, level, organization_id) 
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO courses (title, description, category, instructor_id, level, organization_id, created_by) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `,
-      // NOTE: The `created_by` column doesn't exist in the schema you provided earlier. 
-      // I've omitted it from the INSERT statement. Add it back if you've updated your table.
-      args: [title, description, category, instructor_id, level, req.user.organization_id]
+      args: [title, description, category, instructor_id, level, req.user.organization_id, created_by]
+    });
+    const instructorCheck = await db.execute({
+      sql: `SELECT course_id FROM instructors WHERE instructor_id = ?`,
+      args: [instructor_id]
     });
 
-    // There is no `course_id` in your `users` or a separate `instructors` table schema.
-    // If you need to link a course back to an instructor, it's usually done via the `courses` table.
-    // The line below is commented out as it would cause an error.
-    // await db.execute(`UPDATE users SET course_id = ? WHERE id = ?`, [result.lastInsertRowid, instructor_id]);
-
+    if (instructorCheck.rows.length > 0) {
+      if (instructorCheck.rows[0].course_id === null) {
+      await db.execute({
+        sql: `UPDATE instructors SET course_id = ? WHERE instructor_id = ?`,
+        args: [result.lastInsertRowid, instructor_id]
+      });
+      }
+    } else {
+      await db.execute({
+      sql: `INSERT INTO instructors (user_id, course_id) VALUES (?, ?)`,
+      args: [instructor_id, result.lastInsertRowid]
+      });
+    }
     res.status(200).send({ message: "Course created successfully!", details: result });
   } catch (error) {
     console.error("Error creating course:", error);
@@ -90,10 +100,10 @@ export const createCourse = async (req, res) => {
 
 export const updateCourse = async (req, res) => {
   const { id } = req.params;
-  const { title, description, /* created_by, instructor_id, category, level */ } = req.body;
+  const { title, description } = req.body;
   try {
     const result = await db.execute({
-      sql: `UPDATE courses SET name = ?, description = ? WHERE id = ?`,
+      sql: `UPDATE courses SET title = ?, description = ? WHERE id = ?`,
       args: [title, description, id]
     });
 
@@ -111,9 +121,31 @@ export const updateCourse = async (req, res) => {
 export const deleteCourse = async (req, res) => {
   const { id } = req.params;
   try {
+    // Delete lesson progress for lessons in this course
+    await db.execute({
+      sql: `
+        DELETE FROM lessonProgress 
+        WHERE lesson_id IN (SELECT lesson_id FROM lessons WHERE course_id = ?)
+      `,
+      args: [id]
+    });
+
+    // Delete lessons of this course
+    await db.execute({
+      sql: `DELETE FROM lessons WHERE course_id = ?`,
+      args: [id]
+    });
+
+    // Set course_id to null in instructors table for this course
+    await db.execute({
+      sql: `UPDATE instructors SET course_id = NULL WHERE course_id = ?`,
+      args: [id]
+    });
+
+    // Delete the course itself
     const result = await db.execute({
-        sql: `DELETE FROM courses WHERE id = ?`,
-        args: [id]
+      sql: `DELETE FROM courses WHERE id = ?`,
+      args: [id]
     });
     if (result.rowsAffected > 0) {
       res.json({ message: "Course deleted successfully" });

@@ -87,6 +87,10 @@ export const updateLesson = async (req, res) => {
 export const deleteLesson = async (req, res) => {
   try {
     const { id } = req.params;
+    await db.execute({
+      sql: `DELETE FROM LessonProgress WHERE lesson_id = ?`,
+      args: [id],
+    });
     const result = await db.execute({
       sql: `DELETE FROM Lessons WHERE lesson_id = ?`,
       args: [id],

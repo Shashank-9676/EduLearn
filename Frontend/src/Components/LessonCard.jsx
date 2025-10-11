@@ -38,6 +38,7 @@ import { toast, ToastContainer } from 'react-toastify';
         const err = await response.json();
         toast.error(err.message || "Failed to update lesson");
       }
+      setIsEditing(false);
     } catch (error) {
       console.log("Error updating lesson:", error);
       toast.error("Something went wrong");

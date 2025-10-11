@@ -3,7 +3,7 @@ import { db } from "../index.js";
 export const getEnrollmentOptions = async (req, res) => {
   try {
     const usersResult = await db.execute({
-      sql: "SELECT id AS value, username AS label, email FROM users WHERE user_type IN ('student', 'instructor') AND organization_id = ?",
+      sql: "SELECT id AS value, username AS label, email FROM users WHERE user_type = 'student' AND organization_id = ?",
       args: [req.user.organization_id]
     });
 

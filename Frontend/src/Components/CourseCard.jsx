@@ -112,7 +112,7 @@ import {ToastContainer,  toast } from 'react-toastify';
         <div className="flex items-center justify-between mb-4">
           {userDetails.role != "instructor" ? <div>
             <p className="text-sm text-gray-500">Instructor</p>
-            <p className="font-medium text-gray-900">{course.username}</p>
+            <p className="font-medium text-gray-900">{course.instructor}</p>
           </div> : <div></div>}
           <div className="text-right">
             <p className="text-sm text-gray-500">Level</p>
