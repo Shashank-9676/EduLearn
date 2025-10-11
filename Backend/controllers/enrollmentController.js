@@ -87,14 +87,14 @@ export const createEnrollment = async (req, res) => {
 
     const result = await db.execute({
       sql: `
-        INSERT INTO enrollments (user_id, course_id, enrolled_at, status)
-        VALUES (?, ?, CURRENT_TIMESTAMP, ?)
+        INSERT INTO enrollments (user_id, course_id, instructor_id, enrolled_at, status, organization_id)
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?)
       `,
-      args: [user_id, course_id, status],
+      args: [user_id, course_id, course.instructor_id, status, req.user.organization_id],
     });
 
     return res.status(201).json({
-      id: result.lastInsertRowid,
+      id: Number(result.lastInsertRowid),
       user_id: user_id,
       course_id,
       instructor_id: course.instructor_id,
