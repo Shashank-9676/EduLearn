@@ -25,6 +25,9 @@ if (!isOpen || !lesson) return null;
         return;
       }
       setCompleted(true);
+      toast.success(data.message || 'Progress updated successfully');
+      onClose();
+      window.location.reload();
     } catch (error) {
       console.log("Handle Completed:",error)
     }
@@ -50,11 +53,6 @@ if (!isOpen || !lesson) return null;
         <div className="p-6">
           <div className="bg-black rounded-lg overflow-hidden mb-4">
             <iframe width="100%" height="400" src={`https://www.youtube.com/embed/${lesson.content_url}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-          </div>
-          
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="font-semibold text-gray-900 mb-2">About This Lesson</h3>
-            <p className="text-gray-600">{lesson.description}</p>
           </div>
         </div>
 
