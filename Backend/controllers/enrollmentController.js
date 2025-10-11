@@ -1,8 +1,5 @@
 import { db } from "../index.js";
 
-const isType = (user, expected) =>
-  user && user.user_type && user.user_type.toLowerCase() === expected.toLowerCase();
-
 export const getAllEnrollments = async (req, res) => {
   try {
     const result = await db.execute({
@@ -10,18 +7,18 @@ export const getAllEnrollments = async (req, res) => {
         SELECT 
           e.id, 
           e.status,
-          e.enrollment_date as enrolled_at,
+          e.enrolled_at,
           i.username AS instructor_name, 
           u.username AS student_name, 
           u.user_type, 
           u.email AS student_email,
-          c.name as course_title
+          c.title as course_title
         FROM enrollments e
-        LEFT JOIN users u ON e.student_id = u.id
+        LEFT JOIN users u ON e.user_id = u.id
         LEFT JOIN courses c ON e.course_id = c.id
         LEFT JOIN users i ON c.instructor_id = i.id
         WHERE u.organization_id = ?
-        ORDER BY e.enrollment_date DESC
+        ORDER BY e.enrolled_at DESC
       `,
       args: [req.user.organization_id],
     });
@@ -39,16 +36,16 @@ export const getEnrollmentById = async (req, res) => {
       sql: `
         SELECT 
           e.id, 
-          e.student_id, 
+          e.user_id, 
           u.username AS student_name, 
           e.course_id, 
-          c.name AS course_title, 
+          c.title AS course_title, 
           c.instructor_id, 
           i.username AS instructor_name, 
-          e.enrollment_date as enrolled_at, 
+          e.enrolled_at, 
           e.status 
         FROM enrollments e
-        LEFT JOIN users u ON e.student_id = u.id
+        LEFT JOIN users u ON e.user_id = u.id
         LEFT JOIN courses c ON e.course_id = c.id
         LEFT JOIN users i ON c.instructor_id = i.id
         WHERE e.id = ?
@@ -90,7 +87,7 @@ export const createEnrollment = async (req, res) => {
 
     const result = await db.execute({
       sql: `
-        INSERT INTO enrollments (user_id, course_id, enrollment_date, status)
+        INSERT INTO enrollments (user_id, course_id, enrolled_at, status)
         VALUES (?, ?, CURRENT_TIMESTAMP, ?)
       `,
       args: [user_id, course_id, status],
@@ -114,7 +111,7 @@ export const createEnrollment = async (req, res) => {
 
 export const updateEnrollment = async (req, res) => {
   const { id } = req.params;
-  const { student_id, course_id, status } = req.body;
+  const { user_id, course_id, status } = req.body;
 
   try {
     const existingResult = await db.execute({
@@ -126,12 +123,12 @@ export const updateEnrollment = async (req, res) => {
     }
     const existing = existingResult.rows[0];
 
-    const newStudentId = student_id ?? existing.student_id;
+    const newUserId = user_id ?? existing.user_id;
     const newCourseId = course_id ?? existing.course_id;
     const newStatus = status ?? existing.status;
 
     // Additional validations (optional but good practice)
-    if (student_id) {
+    if (user_id) {
         const studentResult = await db.execute({sql: `SELECT * FROM users WHERE id = ?`, args: [newStudentId]});
         if (studentResult.rows.length === 0) return res.status(400).json({ message: "Student (user_id) not found" });
     }
@@ -141,7 +138,7 @@ export const updateEnrollment = async (req, res) => {
     }
 
     const result = await db.execute({
-      sql: `UPDATE enrollments SET student_id = ?, course_id = ?, status = ? WHERE id = ?`,
+      sql: `UPDATE enrollments SET user_id = ?, course_id = ?, status = ? WHERE id = ?`,
       args: [newStudentId, newCourseId, newStatus, id],
     });
 
