@@ -37,8 +37,6 @@ export const getProgressByUser = async (req, res) => {
 export const getCourseProgress = async (req, res) => {
     try {
         const { user_id, course_id } = req.params;
-
-        // Get the course and its instructor
         const courseResult = await db.execute({
             sql: 'SELECT instructor_id FROM Courses WHERE id = ?',
             args: [course_id]
@@ -48,17 +46,13 @@ export const getCourseProgress = async (req, res) => {
             return res.status(404).send({ message: 'Course not found' });
         }
         const course = courseResult.rows[0];
-
-        // Get the total number of lessons for the course
         const totalLessonsResult = await db.execute({
             sql: 'SELECT COUNT(*) as count FROM Lessons WHERE course_id = ?',
             args: [course_id]
         });
         const totalLessons = totalLessonsResult.rows[0].count;
 
-        // Check if the current user is the instructor for this course
         if (course.instructor_id === Number(user_id)) {
-            // User is the instructor, get progress for all enrolled students
             const progressResult = await db.execute({
                 sql: `
                     SELECT 
@@ -84,7 +78,6 @@ export const getCourseProgress = async (req, res) => {
             
             return res.status(200).send({ users: usersProgress });
         } else {
-            // User is a student, get their own progress
             const completedResult = await db.execute({
                 sql: `
                     SELECT COUNT(*) as count 

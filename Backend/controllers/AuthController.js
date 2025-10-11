@@ -10,7 +10,6 @@ export const register = async (req, res) => {
       args: [username],
     })
 
-    // Correct check: See if the "rows" array has any users in it.
     if (existingUserResult.rows.length > 0) {
       return res.status(400).json({ message: "User already exists" })
     }
@@ -41,14 +40,11 @@ export const login = async (req, res) => {
       args: [email]
     })
 
-    // Correct check: If no rows, the user doesn't exist.
     if (userResult.rows.length === 0) {
       return res.status(400).json({ message: "Invalid user" })
     }
 
-    // Get the actual user object from the first row.
     const user = userResult.rows[0]
-
     const isPasswordMatched = await bcrypt.compare(password, user.password)
     if (!isPasswordMatched) {
       return res.status(400).json({ message: "Invalid password" })

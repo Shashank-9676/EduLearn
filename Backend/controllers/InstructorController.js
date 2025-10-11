@@ -2,7 +2,6 @@ import { db } from '../index.js';
 
 export const getAllInstructors = async (req, res) => {
   try {
-    // This query now joins users with the new instructors table
     const result = await db.execute({
       sql: `
         SELECT 
@@ -30,13 +29,11 @@ export const addInstructor = async (req, res) => {
   try {
     const { instructor_id, course_id, department } = req.body;
 
-    // First, ensure the user is officially marked as an 'instructor'
     await db.execute({
       sql: `UPDATE users SET user_type = 'instructor' WHERE id = ?`,
       args: [instructor_id]
     });
 
-    // Then, add their specific assignment to the instructors table
     const result = await db.execute({
       sql: `INSERT INTO instructors (instructor_id, course_id, department) VALUES (?, ?, ?)`,
       args: [instructor_id, course_id, department]
@@ -82,7 +79,7 @@ export const getInstructorById = async (req, res) => {
 export const updateInstructor = async (req, res) => {
   try {
     const { id } = req.params;
-    const { course_id, department } = req.body; // Can now update department too
+    const { course_id, department } = req.body;
 
     const result = await db.execute({
       sql: `UPDATE instructors SET course_id = ?, department = ? WHERE id = ?`,

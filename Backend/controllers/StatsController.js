@@ -2,7 +2,6 @@ import { db } from "../index.js";
 
 export const getAdminStats = async (req, res) => {
   try {
-    // Run all count queries in parallel for better performance
     const [
       totalUsersResult,
       totalCoursesResult,
@@ -88,16 +87,15 @@ export const getStudentStats = async (req, res) => {
 export const getLessonStats = async (req, res) => {
   const courseId = req.params.id;
   try {
-    const [totalLessonsResult, enrolledStudentsResult] = await Promise.all([
-        db.execute({
-            sql: `SELECT COUNT(*) AS count FROM Lessons WHERE course_id = ?`,
-            args: [courseId]
-        }),
-        db.execute({
-            sql: `SELECT COUNT(DISTINCT user_id) AS count FROM enrollments WHERE course_id = ? AND status = 'active'`,
-            args: [courseId]
-        })
-    ]);
+    const totalLessonsResult = await db.execute({
+        sql: `SELECT COUNT(*) AS count FROM Lessons WHERE course_id = ?`,
+        args: [courseId]
+    })
+    const enrolledStudentsResult = await db.execute({
+        sql: `SELECT COUNT(DISTINCT user_id) AS count FROM enrollments WHERE course_id = ? AND status = 'active'`,
+        args: [courseId]
+    })
+    
 
     const stats = {
       totalLessons: totalLessonsResult.rows[0].count,

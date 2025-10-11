@@ -60,6 +60,8 @@ import {ToastContainer,  toast } from 'react-toastify';
             title: updatedCourse.details.title,
             description: updatedCourse.details.description,
           });
+          setIsEditing(false);
+          window.location.reload();
         } else {
           const errorData = await response.json();
           toast.error(errorData.message || 'Failed to update course');

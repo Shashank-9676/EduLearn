@@ -42,7 +42,7 @@ export const getCourseByStudent = async (req, res) => {
             FROM enrollments e
             INNER JOIN courses c ON e.course_id = c.id
             INNER JOIN users u ON c.instructor_id = u.id
-            WHERE e.student_id = ?
+            WHERE e.user_id = ?
         `,
         args: [id]
     });
