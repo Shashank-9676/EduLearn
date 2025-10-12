@@ -3,6 +3,7 @@ import { User, Lock, Mail, Eye, EyeOff, GraduationCap, Phone, List, Cookie } fro
 import { useNavigate } from 'react-router';
 import { useAuth } from '../context/AuthContext.jsx';
 import { toast, ToastContainer } from 'react-toastify';
+import Cookies from 'js-cookie';
 const Login = () => {
 
   const { setUserDetails } = useAuth();
@@ -84,8 +85,8 @@ const Login = () => {
       setError(data.message || 'Registration failed');
     }
   };
-  if( Cookie.get('jwt_token')){
-    navigate('/dashboard')
+  if (Cookies.get('jwt_token')) {
+    navigate('/dashboard');
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center p-4">
