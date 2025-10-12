@@ -129,7 +129,7 @@ export const updateEnrollment = async (req, res) => {
 
     // Additional validations (optional but good practice)
     if (user_id) {
-        const studentResult = await db.execute({sql: `SELECT * FROM users WHERE id = ?`, args: [newStudentId]});
+        const studentResult = await db.execute({sql: `SELECT * FROM users WHERE id = ?`, args: [newUserId]});
         if (studentResult.rows.length === 0) return res.status(400).json({ message: "Student (user_id) not found" });
     }
     if (course_id) {
@@ -139,7 +139,7 @@ export const updateEnrollment = async (req, res) => {
 
     const result = await db.execute({
       sql: `UPDATE enrollments SET user_id = ?, course_id = ?, status = ? WHERE id = ?`,
-      args: [newStudentId, newCourseId, newStatus, id],
+      args: [newUserId, newCourseId, newStatus, id],
     });
 
     if (result.rowsAffected === 0) {
