@@ -120,7 +120,7 @@ const Login = () => {
           {/* Form Content */}
           <div className="p-8">
             {activeTab === 'login' && (
-              <form className="space-y-6 animate-fadeIn">
+              <form className="space-y-6 animate-fadeIn" onSubmit={handleLoginSubmit}>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 w-5 h-5" />
                   <input required name='email' type="email" placeholder="Email Address" value={loginData.email} onChange={(e) => setLoginData({...loginData, email: e.target.value})} className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"/>
@@ -137,14 +137,14 @@ const Login = () => {
                 <div className="text-left">
                   {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
                 </div>
-                <button type='submit' onClick={handleLoginSubmit} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Sign In</button>
+                <button type='submit' className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Sign In</button>
                 <p className='text-center text-white'>Are you looking to create a Organization? contact <a href="mailto:shashankchowdary09@gmail.com" className="text-blue-200 hover:underline">edulearn</a></p>
               </form>
             )}
 
             {/* Register Form */}
             {activeTab === 'register' && (
-              <form className="space-y-6 animate-fadeIn">
+              <form className="space-y-6 animate-fadeIn" onSubmit={handleRegisterSubmit}>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 w-5 h-5" />
                   <input required name='username' type="text" placeholder="Full Name" value={registerData.username} onChange={(e) => setRegisterData({...registerData, username: e.target.value})} className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"/>
@@ -195,8 +195,8 @@ const Login = () => {
                   </select>
                 </div>
                 <div className="flex items-center">{error && <p className="text-red-500 text-sm ml-2">{error}</p>}</div>
-                <button type='submit' onClick={handleRegisterSubmit} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Create Account</button>
-                <p className='text-center text-white'>Are you looking to create a Organization? contact <a href="mailto:shashankchowdary09@gmail.com" className="text-blue-200 hover:underline">edulearn</a></p>
+                <button type='submit' className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Create Account</button>
+                <p className='text-center text-white'>Are you looking to create a Organization? contact <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shashank09999999@gmail.com&su=Support%20Request," target="_blank" rel="noopener noreferrer" className="text-blue-200 hover:underline">edulearn</a></p>
               </form>
             )}
           </div>

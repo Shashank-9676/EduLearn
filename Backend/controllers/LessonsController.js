@@ -20,7 +20,7 @@ export const createLesson = async (req, res) => {
 
     res.status(201).json({ 
       message: "Lesson created successfully", 
-      details: { id: result.lastInsertRowid, courseId, title, content_url, created_by, lesson_order } 
+      details: { id: Number(result.lastInsertRowid), courseId, title, content_url, created_by, lesson_order } 
     });
   } catch (error) {
     console.error("Error creating lesson:", error);

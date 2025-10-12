@@ -39,7 +39,7 @@ export const addInstructor = async (req, res) => {
       args: [instructor_id, course_id, department]
     });
 
-    res.status(201).json({ message: "Instructor added successfully", id: result.lastInsertRowid });
+    res.status(201).json({ message: "Instructor added successfully", id: Number(result.lastInsertRowid) });
   } catch (err) {
     console.error("Error adding instructor:", err);
     res.status(500).json({ message: "Error adding instructor" });

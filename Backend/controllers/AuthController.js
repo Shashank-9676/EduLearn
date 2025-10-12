@@ -6,8 +6,8 @@ export const register = async (req, res) => {
   try {
     const { username, password, email, user_type = "student", contact, organization_id } = req.body
     const existingUserResult = await db.execute({
-      sql: 'SELECT * FROM users WHERE username = ?',
-      args: [username],
+      sql: 'SELECT * FROM users WHERE username = ? and email = ?',
+      args: [username, email],
     })
 
     if (existingUserResult.rows.length > 0) {

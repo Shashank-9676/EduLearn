@@ -76,13 +76,13 @@ export const createCourse = async (req, res) => {
       if (instructorCheck.rows[0].course_id === null) {
       await db.execute({
         sql: `UPDATE instructors SET course_id = ? WHERE instructor_id = ?`,
-        args: [result.lastInsertRowid, instructor_id]
+        args: [Number(result.lastInsertRowid), instructor_id]
       });
       }
     } else {
       await db.execute({
       sql: `INSERT INTO instructors (user_id, course_id) VALUES (?, ?)`,
-      args: [instructor_id, result.lastInsertRowid]
+      args: [instructor_id, Number(result.lastInsertRowid)]
       });
     }
     res.status(200).send({ message: "Course created successfully!", details: result });
