@@ -1,6 +1,6 @@
 import  { useState, useEffect } from 'react';
 import { User, Lock, Mail, Eye, EyeOff, GraduationCap, Phone, List, Cookie } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Navigate } from 'react-router';
 import { useAuth } from '../context/AuthContext.jsx';
 import { toast, ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
@@ -54,7 +54,7 @@ const Login = () => {
       setError(null);
       localStorage.setItem('userDetails', JSON.stringify({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name }));
       setUserDetails({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name });
-      navigate('/dashboard')
+      navigate('/dashboard',{ replace: true });
     } else {
       setError(data.message || 'Login failed');
     }
@@ -86,7 +86,7 @@ const Login = () => {
     }
   };
   if (Cookies.get('jwt_token')) {
-    navigate('/dashboard');
+    return <Navigate to="/dashboard" replace />;
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center p-4">
