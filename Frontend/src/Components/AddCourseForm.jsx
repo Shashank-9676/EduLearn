@@ -43,7 +43,6 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
       setError('Please fill all required fields');
       return;
     }
-    console.log("Submitting form data:", formData);
     setError(null);
     onSave(formData);
     setFormData({

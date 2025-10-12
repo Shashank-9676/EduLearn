@@ -37,13 +37,7 @@ export const getCourseByStudent = async (req, res) => {
   const { id } = req.params;
   try {
     const courseResult = await db.execute({
-        sql: `
-            SELECT c.*, u.username as instructor, e.course_id
-            FROM enrollments e
-            INNER JOIN courses c ON e.course_id = c.id
-            INNER JOIN users u ON c.instructor_id = u.id
-            WHERE e.user_id = ?
-        `,
+        sql: `SELECT *, courses.id as id FROM enrollments inner join courses on enrollments.course_id = courses.id inner join users on courses.instructor_id = users.id WHERE user_id = ?`,
         args: [id]
     });
     res.json({ details: courseResult.rows });

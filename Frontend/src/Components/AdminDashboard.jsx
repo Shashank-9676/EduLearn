@@ -14,7 +14,6 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [pendingEnrollments, setPendingEnrollments] = useState([]);
   const handleSaveUser = async (userData) => {
-    console.log('User data submitted:', userData);
     const response = await fetch('https://edulearn-hn19.onrender.com/instructors', {
       method: 'POST',
       headers: {
@@ -51,7 +50,6 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
       console.error("Error fetching enrollments:", error);
     }
   };
-  // console.log(pendingEnrollments);
   useEffect(() => {
     fetchEnrollmentsCounts();
     fetchEnrollments();

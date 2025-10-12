@@ -19,8 +19,7 @@ import { toast, ToastContainer } from "react-toastify";
         toast.error("Error updating enrollment status");
         return;
       }
-      const data = await response.json();
-      console.log(data);
+      // const data = await response.json();
       window.location.reload();
     }
     return(

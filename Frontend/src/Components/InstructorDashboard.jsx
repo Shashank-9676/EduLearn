@@ -15,7 +15,6 @@ const InstructorDashboard = () => {
         credentials:'include',
       });
       const data = await response.json();
-      console.log("My Courses Data:", data);
       setMyCourses(data.details);
     } catch (error) {
       toast.error("Error fetching courses")

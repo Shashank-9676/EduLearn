@@ -18,7 +18,6 @@ if (!isOpen || !lesson) return null;
           status: 1 ,
         })
       });
-      console.log("Response:",response)
       const data = await response.json();
       if (!response.ok) {
         toast.error(data.message || 'Failed to update progress');
