@@ -81,7 +81,7 @@ export const createCourse = async (req, res) => {
       }
     } else {
       await db.execute({
-      sql: `INSERT INTO instructors (user_id, course_id) VALUES (?, ?)`,
+      sql: `INSERT INTO instructors (instructor_id, course_id) VALUES (?, ?)`,
       args: [instructor_id, Number(result.lastInsertRowid)]
       });
     }
