@@ -167,7 +167,7 @@ const CourseDetail = () => {
             <h2 className="text-xl font-semibold text-gray-900 mb-3">Course Description</h2>
           <p className="text-gray-600">{courseData.description}</p>
           </div>
-          {(stats?.enrolledStudents > 0 && userDetails.role !== "student") && <Link to={`/progress/${id}`}>
+          {(stats?.enrolledStudents > 0 && userDetails.role == "instructor") && <Link to={`/progress/${id}`}>
             <button className='bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg'>Students Progress</button>
           </Link>}
         </div>
