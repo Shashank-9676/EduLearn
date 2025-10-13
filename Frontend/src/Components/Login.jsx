@@ -138,7 +138,7 @@ const Login = () => {
                   {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
                 </div>
                 <button type='submit' className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Sign In</button>
-                <p className='text-center text-white'>Are you looking to create a Organization? contact <a href="mailto:shashankchowdary09@gmail.com" className="text-blue-200 hover:underline">edulearn</a></p>
+                <p className='text-center text-white'>Are you looking to create a Organization? contact <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shashank09999999@gmail.com&su=Support%20Request," className="text-blue-200 hover:underline">edulearn</a></p>
               </form>
             )}
 
