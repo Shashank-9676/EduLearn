@@ -13,9 +13,7 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
   const [options, setOptions] = useState({
     users: [],
     courses: [],
-    instructors: [],
-    userTypes: [],
-    statuses: []
+    instructors: []
   });
 
   // Mock data for select options
@@ -27,9 +25,7 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
         setOptions({
           users: data.users,
           courses: data.courses,
-          instructors: data.instructors,
-          userTypes: data.userTypes,
-          statuses: data.statuses
+          instructors: data.instructors
         });
       } catch (error) {
         toast.error("Error fetching enrollment options")
@@ -196,7 +192,7 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
               )}
             />
             {/* Course Selection */}
-            <CustomSelect options={options.courses} value={formData.course_id} onChange={(value) => handleInputChange('course_id', value)} placeholder="Select a course" label="Course (optional)" error={errors.course_id}/>
+            {/* <CustomSelect options={options.courses} value={formData.course_id} onChange={(value) => handleInputChange('course_id', value)} placeholder="Select a course" label="Course (optional)" error={errors.course_id}/> */}
             {/* Department Input */}
             <div className="relative p-4 rounded-lg">
               <label className="block text-sm font-medium text-gray-700 mb-2">Department <span className="text-red-500">*</span></label>

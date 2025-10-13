@@ -117,29 +117,34 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
             <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">Users</h2>
               <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center" onClick={() => setIsPopupOpen(true)}>
-                <UserPlus className="w-4 h-4 mr-2" />Add User
+                <UserPlus className="w-4 h-4 mr-2" />Add Instructor
               </button>
               <AddUserPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} onSave={handleSaveUser} />
             </div>
             <div className="p-6">
-              <div className="overflow-hidden">
-                <table className="min-w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Join Date</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {users?.map((user) => (
-                      <UserRow key={user.id} user={user} />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              {users?.length > 0 ? (
+                <div className="overflow-hidden">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Join Date</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {users?.map((user) => (
+                        <UserRow key={user.id} user={user} />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>) : 
+                <div className="text-center py-8">
+                  <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">No users found</p>
+                </div>}
             </div>
           </div>
         </div>
