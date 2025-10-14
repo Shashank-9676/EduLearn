@@ -7,7 +7,7 @@ import LessonCard from './LessonCard';
 // import ProgressExample from './ProgressCircle';
 import AddLessonForm from './AddLessonForm';
 import Header from './Header';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 const CourseDetail = () => {
   const {userDetails} = useAuth()
     const {id} = useParams()
@@ -204,7 +204,6 @@ const CourseDetail = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
       {/* Add Lesson Form Modal */}
       {showAddLessonForm && <AddLessonForm setShowAddLessonForm={setShowAddLessonForm} id={id} created_by={userDetails.id} />}
     </div>

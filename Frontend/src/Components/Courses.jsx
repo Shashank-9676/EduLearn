@@ -4,7 +4,7 @@ import Header from './Header';
 import CourseCard from './CourseCard';
 import CreateCourseForm from './AddCourseForm';
 import { useAuth } from '../context/AuthContext';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 const Courses = () => {
   const {userDetails} = useAuth()
   const [searchTerm, setSearchTerm] = useState('');
@@ -60,7 +60,6 @@ if(!coursesData) {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <ToastContainer />
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6">

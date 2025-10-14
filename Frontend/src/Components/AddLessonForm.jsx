@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus, X, Save } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
   const [newLesson, setNewLesson] = useState({
@@ -50,7 +50,6 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000080] bg-opacity-50">
       <div className="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 max-h-screen overflow-y-auto">
-        <ToastContainer theme="colored"/>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">

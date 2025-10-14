@@ -2,7 +2,7 @@
   import { useEffect, useState } from 'react';
   import VideoLesson from './VideoLesson';
   import { useAuth } from '../context/AuthContext';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
   const LessonCard = ({ lesson }) => {
       const {userDetails} = useAuth()
       const [selectedLesson, setSelectedLesson] = useState(null);
@@ -133,7 +133,6 @@ import { toast, ToastContainer } from 'react-toastify';
 
       </div>
       <VideoLesson lesson={selectedLesson} isOpen={isOpen} onClose={closeVideo} completed={completed} setCompleted={setCompleted}/>
-      <ToastContainer />
       {isEditing && (
       <form
       onSubmit={handleEditLesson}

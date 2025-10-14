@@ -2,7 +2,7 @@ import { useState } from "react";
 import {Trash2, Eye,Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
-import {ToastContainer,  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
   const CourseCard = ({ course }) => {
     const {userDetails} = useAuth()
     const navigate = useNavigate();
@@ -91,7 +91,6 @@ import {ToastContainer,  toast } from 'react-toastify';
       
     <div className="bg-white  h-full rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Course Image */}
-      <ToastContainer theme="colored"/>
       <div className="relative h-48  bg-gray-700 ">
         {course.status && <div className="absolute top-4 right-4">
           <span className={`px-2 py-1 text-xs font-semibold rounded-full ${

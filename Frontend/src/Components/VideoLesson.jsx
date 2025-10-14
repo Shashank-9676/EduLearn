@@ -1,6 +1,6 @@
 import { X, Video, Circle, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 const VideoLesson = ({ lesson, isOpen, onClose,completed, setCompleted }) => {
   const {userDetails} = useAuth();
 if (!isOpen || !lesson) return null;
@@ -34,7 +34,6 @@ if (!isOpen || !lesson) return null;
   }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000080] overflow-y-auto p-4 h-screen">
-      <ToastContainer theme="colored" />
       <div className=" bg-white rounded-xl w-full max-w-4xl mx-4">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">

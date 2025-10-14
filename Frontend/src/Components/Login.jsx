@@ -2,7 +2,7 @@ import  { useState, useEffect } from 'react';
 import { User, Lock, Mail, Eye, EyeOff, GraduationCap, Phone, List, Cookie } from 'lucide-react';
 import { useNavigate, Navigate } from 'react-router';
 import { useAuth } from '../context/AuthContext.jsx';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import CustomSelect from './CustomSelect.jsx';
 const Login = () => {
@@ -99,7 +99,6 @@ const Login = () => {
           <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000"></div>
         </div>
       </div>
-      <ToastContainer />
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">

@@ -5,6 +5,7 @@ import { BrowserRouter,Routes, Route, Navigate } from 'react-router'
 import CourseDetail from './Components/CourseDetail'
 import ProtectedRoute from './Components/ProtectedRoute'
 import StudentProgress from './Components/StudentProgress'
+import { ToastContainer } from 'react-toastify'
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +17,7 @@ function App() {
         <Route path="/progress/:id" element={<ProtectedRoute><StudentProgress /></ProtectedRoute>} />
         <Route path='*' element={<ProtectedRoute><Navigate to={'/dashboard'} /></ProtectedRoute>} />
       </Routes>
+      <ToastContainer theme="colored" />
     </BrowserRouter>
   )
 }

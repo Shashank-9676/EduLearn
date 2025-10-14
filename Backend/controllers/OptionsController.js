@@ -17,25 +17,10 @@ export const getEnrollmentOptions = async (req, res) => {
         args: [req.user.organization_id]
     });
 
-    // Static options remain the same
-    const userTypes = [
-      { value: "instructor", label: "Instructor" },
-      { value: "student", label: "Student" },
-    ];
-
-    const statuses = [
-      { value: "active", label: "Active" },
-      { value: "pending", label: "Pending" },
-      { value: "inactive", label: "Inactive" },
-      { value: "suspended", label: "Suspended" },
-    ];
-
     res.json({
       users: usersResult.rows,
       courses: coursesResult.rows,
       instructors: instructorsResult.rows,
-      userTypes,
-      statuses,
     });
   } catch (error) {
     console.error("Error fetching enrollment options:", error);

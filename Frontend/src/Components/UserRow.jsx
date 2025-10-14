@@ -1,6 +1,6 @@
   import { Check, X } from "lucide-react";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
   const UserRow = ({ user }) => {
     const [isEdit, setIsEdit] = useState(false);
     const [isDelete, setIsDelete] = useState(false);

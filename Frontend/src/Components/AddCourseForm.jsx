@@ -19,7 +19,7 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
     try {
       const response = await fetch('https://edulearn-hn19.onrender.com/instructors',{credentials:'include'});
       const data = await response.json();
-      setInstructorOptions(data.details.map(inst => ({ value: inst.id, label: `${inst.username} - ${inst.department}` })));
+      setInstructorOptions(data.details.map(inst => ({ value: inst.instructor_id, label: `${inst.username} - ${inst.department}` })));
     } catch (err) {
       console.error('Error fetching instructors:', err);
       return [];

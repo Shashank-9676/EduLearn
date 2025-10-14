@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { X, Save,  UserPlus,  AlertCircle, Star } from 'lucide-react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const AddUserPopup = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -160,7 +160,6 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
       {/* Backdrop */}
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div className="inline-block w-full max-w-2xl p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl sm:align-middle">
-          <ToastContainer theme='colored' />
           {/* Header */}
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <div className="flex items-center space-x-3">
