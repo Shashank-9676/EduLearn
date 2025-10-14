@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, BookOpen, Save, Upload } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import CustomSelect from './CustomSelect';
 const CreateCourse = ({ isOpen, onClose, onSave }) => {
   const {userDetails} = useAuth()
   const [formData, setFormData] = useState({
@@ -85,36 +86,19 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-              <select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Select category</option>
-                {categoryOptions.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+              <CustomSelect options={categoryOptions.map(cat => ({value: cat, label: cat}))} value={formData.category} onChange={(value) => setFormData({...formData, category: value})} placeholder="Select category" label="Select Category" />
             </div>
 
             {/* Instructor */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Instructor *</label>
-              <select required value={formData.instructor_id} onChange={(e) => setFormData({...formData, instructor_id: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Select instructor</option>
-                {instructorOptions.map((instructor) => (
-                  <option key={instructor.value} value={instructor.value}>
-                    {instructor.label}
-                  </option>
-                ))}
-              </select>
+              <CustomSelect options={instructorOptions} value={formData.instructor_id} onChange={(value) => setFormData({...formData, instructor_id: value})} placeholder="Select Instructor" label="Instructor" />
             </div>
 
             {/* Level */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Level *</label>
-              <select required value={formData.level} onChange={(e) => setFormData({...formData, level: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Select level</option>
-                {levelOptions.map((level) => (
-                  <option key={level} value={level}>{level}</option>
-                ))}
-              </select>
+              <CustomSelect options={levelOptions.map(lvl => ({value: lvl, label: lvl}))} value={formData.level} onChange={(value) => setFormData({...formData, level: value})} placeholder="Select level" label="Select Level" />
             </div>
           </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}

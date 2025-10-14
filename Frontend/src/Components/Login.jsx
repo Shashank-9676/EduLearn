@@ -4,6 +4,7 @@ import { useNavigate, Navigate } from 'react-router';
 import { useAuth } from '../context/AuthContext.jsx';
 import { toast, ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
+import CustomSelect from './CustomSelect.jsx';
 const Login = () => {
 
   const { setUserDetails } = useAuth();
@@ -176,23 +177,8 @@ const Login = () => {
                   </button>
                 </div>
                 <div className="relative">
-                  <List className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 w-5 h-5" />
-                  <select required name="organization" value={registerData.organization_id}
-                    onChange={(e) =>
-                      setRegisterData({
-                        ...registerData, organization_id: e.target.value,
-                      })
-                    } className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
-                  >
-                    <option value="" disabled>Select Organization</option>
-                    {!loadingOrgs ? (
-                      organizations.map((org) => (
-                        <option key={org.id} value={org.id} style={{ color: 'black' }}>{org.name}</option>
-                      ))
-                    ) : (
-                      <option>Loading...</option>
-                    )}
-                  </select>
+                  {/* <List className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 w-5 h-5 mr-10" /> */}
+                  <CustomSelect label="Select Organization" loading={loadingOrgs} options={organizations?.map(org => ({ value: org.id, label: org.name }))} value={registerData.organization_id} onChange={(value) => setRegisterData({ ...registerData, organization_id: value })} Color="blue"/>
                 </div>
                 <div className="flex items-center">{error && <p className="text-red-500 text-sm ml-2">{error}</p>}</div>
                 <button type='submit' className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Create Account</button>

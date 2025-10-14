@@ -81,8 +81,8 @@ export const createCourse = async (req, res) => {
       }
     } else {
       await db.execute({
-      sql: `INSERT INTO instructors (instructor_id, course_id) VALUES (?, ?)`,
-      args: [instructor_id, Number(result.lastInsertRowid)]
+      sql: `INSERT INTO instructors (instructor_id, course_id, department) VALUES (?, ?, ?)`,
+      args: [instructor_id, Number(result.lastInsertRowid), instructorCheck.rows[0].department]
       });
     }
     res.status(200).send({ message: "Course created successfully!", details: result });
