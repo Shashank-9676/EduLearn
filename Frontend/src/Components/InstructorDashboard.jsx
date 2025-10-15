@@ -5,17 +5,21 @@ import CourseCard from './CourseCard';
 import { useAuth } from '../context/AuthContext';
 import EmptyView from './EmptyView';
 import { toast } from 'react-toastify';
+import SyncLoader from 'react-spinners/SyncLoader';
 const InstructorDashboard = () => {
   const {userDetails} = useAuth();
   const [instructorStats, setInstructorStats] = useState({});
   const [myCourses, setMyCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
   const fetchMyCourses = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/courses/instructor/${userDetails.id}`,{
         credentials:'include',
       });
       const data = await response.json();
       setMyCourses(data.details);
+      setLoading(false);
     } catch (error) {
       toast.error("Error fetching courses")
       console.error("Error fetching courses:", error);
@@ -23,19 +27,27 @@ const InstructorDashboard = () => {
   }
   const fetchInstructorStats = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/stats/instructor/${userDetails.id}`,{credentials:'include'});
       const data = await response.json();
       setInstructorStats(data.details);
     } catch (error) {
       console.error("Error fetching instructor stats:", error);
     }
+    setLoading(false);
   }
 
  useEffect(() => {
     fetchMyCourses();
     fetchInstructorStats();
  },[])
-
+  if(loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <SyncLoader color="#333333" size={15} />
+      </div>
+    );
+  }
   if (myCourses.length === 0) {
     return <EmptyView />;
   }

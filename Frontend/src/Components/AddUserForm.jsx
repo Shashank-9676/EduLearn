@@ -16,7 +16,6 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
     instructors: []
   });
 
-  // Mock data for select options
   useEffect(() => {
     const fetchOptions = async () => {
       try {
@@ -129,7 +128,6 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
   const validateForm = () => {
     const newErrors = {};
     
-    // if (!formData.course_id) newErrors.course_id = 'Course is required';
     if (!formData.instructor_id) newErrors.instructor_id = 'Instructor is required';
     if(!formData.department) newErrors.department = 'Department Is required';
     setErrors(newErrors);

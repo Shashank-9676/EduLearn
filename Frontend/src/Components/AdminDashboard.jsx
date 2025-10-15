@@ -3,6 +3,7 @@ import { Users, BookOpen,   UserPlus,  Clock,  Target,  Activity } from 'lucide-
 import UserRow from './UserRow';
 import AddUserPopup from './AddUserForm'
 import StatCard from './StarCard';
+import SyncLoader from 'react-spinners/SyncLoader';
 const AdminDashboard = () => {
   const [stats,setStats] = useState({
     totalUsers: 0,
@@ -10,6 +11,7 @@ const AdminDashboard = () => {
     activeUsers: 0,
     pendingEnrollments: 0
   });
+    const [loading, setLoading] = useState(true);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [users, setUsers] = useState([]);
     const [pendingEnrollments, setPendingEnrollments] = useState([]);
@@ -31,21 +33,25 @@ const AdminDashboard = () => {
 
   const fetchEnrollmentsCounts = async () => {
     try {
-const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
-  credentials: "include",
-});
+      setLoading(true);
+      const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
+        credentials: "include",
+      });
       const {details} = await response.json();
       setStats(details);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching enrollments:", error);
     }
   };
   const fetchEnrollments = async () => {
     try {
+      setLoading(true);
       const response = await fetch('https://edulearn-hn19.onrender.com/enrollments/',{credentials:'include'});
       const { details } = await response.json();
       setUsers(details);
       setPendingEnrollments(details.filter(user => user.status == "pending"));
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching enrollments:", error);
     }
@@ -54,7 +60,15 @@ const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
     fetchEnrollmentsCounts();
     fetchEnrollments();
  },[])
-
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <SyncLoader color="#333333" size={15} />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}

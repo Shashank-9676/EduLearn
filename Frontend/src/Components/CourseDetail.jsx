@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { 
-  BookOpen,   Plus,  Play,  FileText, Users, CheckCircle,  Edit,  Trash2} from 'lucide-react';
+import { BookOpen,   Plus, FileText, Users, CheckCircle} from 'lucide-react';
+import SyncLoader from 'react-spinners/SyncLoader';
 import { Link, useParams } from 'react-router';
 import LessonCard from './LessonCard';
-// import ProgressExample from './ProgressCircle';
 import AddLessonForm from './AddLessonForm';
 import Header from './Header';
 import { toast } from 'react-toastify';
@@ -14,12 +13,13 @@ const CourseDetail = () => {
   const [stats, setStats] = useState(null);
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
   const [progress,setProgress] = useState(0)
-
+  const [loading, setLoading] = useState(true);
   const [courseData, setCourseData] = useState({});
    const [lessons, setLessons] = useState([]);
 
   const fetchStats = async (courseId) => {
     try {
+      setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/stats/course/${courseId}`, {
         headers: {
           "Content-Type": "application/json",
@@ -32,12 +32,14 @@ const CourseDetail = () => {
       } else {
         console.error('Failed to fetch course data');
       }
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching course data:', error);
     }
   };
    const fetchProgress = async() => {
     try {
+      setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
       if (response.ok){
         const data = await response.json()
@@ -48,10 +50,11 @@ const CourseDetail = () => {
       toast.error("Error fetching Progress data")
       console.error('Error fetching Progress data:', error);
     }
-    
+    setLoading(false);
    }
     const fetchCourseData = async (courseId) => {
     try {
+      setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${courseId}`, {
         headers: {
           "Content-Type": "application/json",
@@ -64,12 +67,14 @@ const CourseDetail = () => {
       } else {
         console.error('Failed to fetch course data');
       }
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching course data:', error);
     }
   }
   const fetchLessons = async (courseId) => {
     try {
+      setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${courseId}/lessons`, {
         headers: {
           "Content-Type": "application/json",
@@ -82,6 +87,7 @@ const CourseDetail = () => {
       } else {
         console.error('Failed to fetch lessons data');
       }
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching lessons data:', error);
     }
@@ -94,6 +100,13 @@ const CourseDetail = () => {
     fetchProgress();
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <SyncLoader color="#333333" size={15} />
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />

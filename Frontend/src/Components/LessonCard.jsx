@@ -3,12 +3,14 @@
   import VideoLesson from './VideoLesson';
   import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import SyncLoader from 'react-spinners/SyncLoader';
   const LessonCard = ({ lesson }) => {
       const {userDetails} = useAuth()
       const [selectedLesson, setSelectedLesson] = useState(null);
       const [completed, setCompleted] = useState(0);
       const [isOpen, setIsOpen] = useState(false);
       const [isEditing, setIsEditing] = useState(false);
+      const [loading, setLoading] = useState(true);
       const [formData, setFormData] = useState({
         title: lesson.title,
         content_url: lesson.content_url,
@@ -66,6 +68,7 @@ import { toast } from 'react-toastify';
 
     const fetchProgress = async () => {
       try {
+        setLoading(true);
         const response = await fetch(`https://edulearn-hn19.onrender.com/progress/lesson/${lesson.lesson_id}/user/${userDetails.id}`, {
           method: 'GET',
           headers: {
@@ -80,6 +83,7 @@ import { toast } from 'react-toastify';
           toast.error(data.message);
           console.error(data.message);
         }
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching progress:', error);
       }
@@ -91,14 +95,18 @@ import { toast } from 'react-toastify';
         setIsOpen(false);
         setSelectedLesson(null);
   };
-
+      if(loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <SyncLoader color="#333333" size={15} />
+      </div>
+    );
+      }
     return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-3 " >
         <div className="flex items-center space-x-3 cursor-pointer" onClick={openVideo}>
-          <div className={`p-2 rounded-lg ${
-            lesson.type === 'video' ? 'bg-blue-100' : 'bg-green-100'
-          }`}>
+          <div className={`p-2 rounded-lg ${lesson.type === 'video' ? 'bg-blue-100' : 'bg-green-100'}`}>
             {lesson.type !== 'video' ? (
               <Video className={`w-5 h-5 ${lesson.type === 'video' ? 'text-blue-600' : 'text-green-600'}`} />
             ) : (

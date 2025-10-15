@@ -5,16 +5,21 @@ import CourseCard from './CourseCard';
 import CreateCourseForm from './AddCourseForm';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import SyncLoader from 'react-spinners/SyncLoader';
+import FailureView from './FailureView';
 const Courses = () => {
   const {userDetails} = useAuth()
   const [searchTerm, setSearchTerm] = useState('');
   const [coursesData, setCoursesData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
     const fetchCourses = async () => {
     try {
+      setLoading(true);
       const response = await fetch("https://edulearn-hn19.onrender.com/courses",{credentials:'include',});
       const data = await response.json();
       setCoursesData(data.details);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
@@ -51,9 +56,15 @@ const Courses = () => {
     }
     return filtered;
   };
-
+if(loading){
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <SyncLoader color="#333333" size={15} />
+      </div>
+    );
+}
 if(!coursesData) {
-    return <div>Loading...</div>;
+    return <FailureView />;
   }
   const filteredCourses = filterCourses();
   

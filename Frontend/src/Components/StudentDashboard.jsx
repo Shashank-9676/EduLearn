@@ -2,32 +2,32 @@ import React, { useState } from 'react';
 import { BookOpen,   Users,  Clock,  Award} from 'lucide-react';
 import StatCard from './StarCard';
 import CourseCard from './CourseCard';
-// import Header from './Header';
+import SyncLoader from 'react-spinners/SyncLoader';
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import EmptyView from './EmptyView';
 const StudentDashboard = () => {
   const {userDetails} = useAuth();
-  const [studentStats, setStudentStats] = useState({
-    totalCourses: 5,
-    totalStudents: 128,
-  });
-
+  const [studentStats, setStudentStats] = useState({totalCourses: 5, totalStudents: 128});
+  const [loading, setLoading] = useState(true);
   const [myCourses, setMyCourses] = useState([]);
   
   const fetchMyCourses = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/courses/student/${userDetails.id}`,{
         credentials:'include',
       });
       const data = await response.json();
       setMyCourses(data.details);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
   }
   const fetchStudentStats = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`https://edulearn-hn19.onrender.com/stats/student/${userDetails.id}`,{
         credentials:'include',
       });
@@ -36,13 +36,20 @@ const StudentDashboard = () => {
     } catch (error) {
       console.error("Error fetching student stats:", error);
     }
+    setLoading(false);
   }
 
  useEffect(() => {
     fetchMyCourses();
     fetchStudentStats();
  },[])
-
+  if(loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <SyncLoader color="#333333" size={15} />
+      </div>
+    );
+  }
   if (!studentStats || myCourses.length === 0) {
     return <EmptyView />;
   }
