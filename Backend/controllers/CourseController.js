@@ -9,7 +9,7 @@ export const getAllCourses = async (req, res) => {
         LEFT JOIN users u ON c.instructor_id = u.id
         WHERE c.organization_id = ?
       `,
-      args: [req.user.organization_id],
+      args: [req.user.organization_id ?? 1],
     });
     res.status(200).json({ status: "success", details: courseResult.rows });
   } catch (error) {

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import CustomSelect from './CustomSelect.jsx';
+import Header from './Header.jsx';
 const Login = () => {
 
   const { setUserDetails } = useAuth();
@@ -55,7 +56,7 @@ const Login = () => {
       setError(null);
       localStorage.setItem('userDetails', JSON.stringify({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name }));
       setUserDetails({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name });
-      navigate('/dashboard',{ replace: true });
+      navigate('/',{ replace: true });
     } else {
       setError(data.message || 'Login failed');
     }
@@ -87,11 +88,14 @@ const Login = () => {
     }
   };
   if (Cookies.get('jwt_token')) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center p-4">
       {/* Background Animation */}
+      
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -inset-10 opacity-30">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
@@ -188,6 +192,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
