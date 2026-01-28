@@ -20,7 +20,7 @@ const StudentProgress = () => {
     const fetchCourseProgress = async () => {
       try {
         setLoading(true);
-      const response = await fetch(`https://edulearn-hn19.onrender.com/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
         const data = await response.json();
         if (response.ok) {
           setStudents(data.users);

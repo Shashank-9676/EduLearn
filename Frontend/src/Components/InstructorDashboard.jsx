@@ -14,7 +14,7 @@ const InstructorDashboard = () => {
   const fetchMyCourses = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/instructor/${userDetails.id}`,{
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/instructor/${userDetails.id}`,{
         credentials:'include',
       });
       const data = await response.json();
@@ -28,7 +28,7 @@ const InstructorDashboard = () => {
   const fetchInstructorStats = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`https://edulearn-hn19.onrender.com/stats/instructor/${userDetails.id}`,{credentials:'include'});
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/stats/instructor/${userDetails.id}`,{credentials:'include'});
       const data = await response.json();
       setInstructorStats(data.details);
     } catch (error) {

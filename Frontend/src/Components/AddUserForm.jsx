@@ -19,7 +19,7 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const response = await fetch("https://edulearn-hn19.onrender.com/form/enrollment-options",{credentials:'include',});
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/form/enrollment-options`,{credentials:'include',});
         const data = await response.json();
         setOptions({
           users: data.users,

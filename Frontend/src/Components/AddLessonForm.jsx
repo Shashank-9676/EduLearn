@@ -16,7 +16,7 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
       return;
     }
     try {
-      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${id}/lessons`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/${id}/lessons`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

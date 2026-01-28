@@ -13,6 +13,11 @@ import { toast } from 'react-toastify';
   });
 
     const viewDetails  = () => {
+      if(!userDetails) {
+        toast.error("Please login to view details");
+        navigate('/login');
+        return;
+      }
       if(userDetails.id !== course.instructor_id && userDetails.role == "instructor" || course.status == "pending") {
         toast.error("You don't have access to view this course");
         return;
@@ -21,7 +26,7 @@ import { toast } from 'react-toastify';
     }
     const handleDeleteCourse = async () => {
       try {
-        const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${course.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/${course.id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -44,7 +49,7 @@ import { toast } from 'react-toastify';
     const handleEditCourse = async (e) => {
       e.preventDefault();
       try {
-        const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${course.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/${course.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -72,7 +77,12 @@ import { toast } from 'react-toastify';
     };
 
     const enrollment = async() => {
-      const response = await fetch(`https://edulearn-hn19.onrender.com/enrollments/`, {
+      if(!userDetails) {
+        toast.error("Please login to enroll");
+        navigate('/login');
+        return;
+      }
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/enrollments/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -111,17 +121,17 @@ import { toast } from 'react-toastify';
 
         <p className="text-gray-600 text-sm mb-4 h-16 line-clamp-2">{course.description}</p>
         <div className="flex items-center justify-between mb-4">
-          {userDetails.role != "instructor" ? <div>
+          {userDetails?.role != "instructor" && course.instructor ? <div>
             <p className="text-sm text-gray-500">Instructor</p>
             <p className="font-medium text-gray-900">{course.instructor}</p>
           </div> : <div></div>}
-          <div className="text-right">
+          <div className="text-right ml-auto">
             <p className="text-sm text-gray-500">Level</p>
             <p className="font-medium text-gray-900">{course.level}</p>
           </div>
         </div>
 
-        {userDetails.role == "admin" ? <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+        {userDetails?.role == "admin" ? <div className="flex items-center justify-between pt-4 border-t border-gray-200">
           <div className="flex space-x-2">
             <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" onClick={viewDetails}>
               <Eye className="w-4 h-4" />
@@ -135,7 +145,7 @@ import { toast } from 'react-toastify';
           </div>
         </div>
         : 
-        userDetails.role == "instructor" ? 
+        userDetails?.role == "instructor" ? 
         <div className="flex items-center justify-center pt-4 border-t border-gray-200">
           <div className="flex space-x-2 w-full">
             <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" onClick={viewDetails}>

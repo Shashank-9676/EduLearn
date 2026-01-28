@@ -20,7 +20,7 @@ const CourseDetail = () => {
   const fetchStats = async (courseId) => {
     try {
       setLoading(true);
-      const response = await fetch(`https://edulearn-hn19.onrender.com/stats/course/${courseId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/stats/course/${courseId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -40,7 +40,7 @@ const CourseDetail = () => {
    const fetchProgress = async() => {
     try {
       setLoading(true);
-      const response = await fetch(`https://edulearn-hn19.onrender.com/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/progress/course/${id}/user/${userDetails.id}`,{credentials:'include',})
       if (response.ok){
         const data = await response.json()
         setProgress(data.details?.percent)
@@ -55,7 +55,7 @@ const CourseDetail = () => {
     const fetchCourseData = async (courseId) => {
     try {
       setLoading(true);
-      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${courseId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/${courseId}`, {
         headers: {
           "Content-Type": "application/json",
         },credentials:'include',
@@ -75,7 +75,7 @@ const CourseDetail = () => {
   const fetchLessons = async (courseId) => {
     try {
       setLoading(true);
-      const response = await fetch(`https://edulearn-hn19.onrender.com/courses/${courseId}/lessons`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/${courseId}/lessons`, {
         headers: {
           "Content-Type": "application/json",
         },

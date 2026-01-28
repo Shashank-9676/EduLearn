@@ -197,7 +197,7 @@ const About = () => {
             Join our community of learners and take the first step towards achieving your goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-blue-600 hover:bg-gray-100 py-3 px-8 rounded-lg font-semibold transition-colors">
+            <button className="bg-white text-blue-600 hover:bg-gray-100 py-3 px-8 rounded-lg font-semibold transition-colors" onClick={() => navigate('/courses')}>
               Browse Courses
             </button>
             <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 py-3 px-8 rounded-lg font-semibold transition-colors" onClick={() => navigate('/contact')}>

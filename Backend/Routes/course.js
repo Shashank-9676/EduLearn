@@ -1,11 +1,12 @@
-import { getAllCourses, getCourseByInstructor , getCourseById, getCourseByStudent, createCourse, updateCourse, deleteCourse } from "../controllers/CourseController.js";
+import {getCoursesOfOrganizations, getAllCourses, getCourseByInstructor , getCourseById, getCourseByStudent, createCourse, updateCourse, deleteCourse } from "../controllers/CourseController.js";
 import { getLessonById, createLesson, getLessonsByCourse, updateLesson, deleteLesson } from '../controllers/LessonsController.js';
 
 import { Router } from "express";
 import {  authMiddleware, rbacMiddleware } from "../middlewares/auth.js";
 const router = Router();
-router.get('/',  getAllCourses);
-router.get('/instructor/:id',  getCourseByInstructor);
+router.get('/organization-courses', getCoursesOfOrganizations);
+router.get('/', authMiddleware, getAllCourses);
+router.get('/instructor/:id', authMiddleware, getCourseByInstructor);
 router.get('/student/:id',authMiddleware,  getCourseByStudent);
 router.get('/:id',  getCourseById);
 router.post('/', authMiddleware, rbacMiddleware(['admin']), createCourse);

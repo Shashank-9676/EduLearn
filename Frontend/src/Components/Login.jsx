@@ -23,7 +23,7 @@ const Login = () => {
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
-      const res = await fetch('https://edulearn-hn19.onrender.com/form/organization-options', {credentials:'include'});
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/form/organization-options`, {credentials:'include'});
       const data = await res.json();
       setOrganizations(data.details || []);
       } catch (err) {
@@ -45,7 +45,7 @@ const Login = () => {
     const navigate = useNavigate();
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('https://edulearn-hn19.onrender.com/api/login', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: loginData.email, password: loginData.password }),
@@ -68,7 +68,7 @@ const Login = () => {
       toast.error('Passwords do not match!');
       return;
     }
-    const response = await fetch('https://edulearn-hn19.onrender.com/api/register', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

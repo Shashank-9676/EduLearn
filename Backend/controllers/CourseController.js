@@ -9,7 +9,7 @@ export const getAllCourses = async (req, res) => {
         LEFT JOIN users u ON c.instructor_id = u.id
         WHERE c.organization_id = ?
       `,
-      args: [req.user.organization_id ?? 1],
+      args: [req.user.organization_id],
     });
     res.status(200).json({ status: "success", details: courseResult.rows });
   } catch (error) {
@@ -18,6 +18,44 @@ export const getAllCourses = async (req, res) => {
   }
 };
 
+export const getCoursesOfOrganizations = async (req, res) => {
+  try {
+
+    const courseResult = await db.execute({
+      sql: `
+        SELECT 
+          o.id as organization_id, 
+          o.name as organization_name,
+          json_group_array(json_object(
+            'id', c.id,
+            'title', c.title,
+            'description', c.description,
+            'category', c.category,
+            'level', c.level,
+            'instructor_id', c.instructor_id,
+            'organization_id', c.organization_id,
+            'organization_name', o.name
+          )) as courses
+        FROM courses c 
+        JOIN organizations o ON c.organization_id = o.id
+        GROUP BY o.id
+      `,
+      args: [],
+    });
+
+    const details = courseResult.rows.map(row => ({
+      ...row,
+      courses: JSON.parse(row.courses)
+    }));
+
+    return res.status(200).json({ status: "success", details: details });
+
+
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
+  }
+}
 export const getCourseByInstructor = async (req, res) => {
   const { id } = req.params;
   try {
@@ -37,8 +75,8 @@ export const getCourseByStudent = async (req, res) => {
   const { id } = req.params;
   try {
     const courseResult = await db.execute({
-        sql: `SELECT *, courses.id as id FROM enrollments inner join courses on enrollments.course_id = courses.id inner join users on courses.instructor_id = users.id WHERE user_id = ?`,
-        args: [id]
+      sql: `SELECT *, courses.id as id FROM enrollments inner join courses on enrollments.course_id = courses.id inner join users on courses.instructor_id = users.id WHERE user_id = ?`,
+      args: [id]
     });
     res.json({ details: courseResult.rows });
   } catch (error) {
@@ -52,8 +90,8 @@ export const createCourse = async (req, res) => {
     const { title, description, category, instructor_id, level, created_by } = req.body;
 
     const userResult = await db.execute({
-        sql: `SELECT user_type FROM users WHERE id = ?`,
-        args: [created_by]
+      sql: `SELECT user_type FROM users WHERE id = ?`,
+      args: [created_by]
     });
 
     if (userResult.rows.length === 0 || userResult.rows[0].user_type !== 'admin') {
@@ -74,15 +112,15 @@ export const createCourse = async (req, res) => {
 
     if (instructorCheck.rows.length > 0) {
       if (instructorCheck.rows[0].course_id === null) {
-      await db.execute({
-        sql: `UPDATE instructors SET course_id = ? WHERE instructor_id = ?`,
-        args: [Number(result.lastInsertRowid), instructor_id]
-      });
+        await db.execute({
+          sql: `UPDATE instructors SET course_id = ? WHERE instructor_id = ?`,
+          args: [Number(result.lastInsertRowid), instructor_id]
+        });
       }
     } else {
       await db.execute({
-      sql: `INSERT INTO instructors (instructor_id, course_id, department) VALUES (?, ?, ?)`,
-      args: [instructor_id, Number(result.lastInsertRowid), instructorCheck.rows[0].department]
+        sql: `INSERT INTO instructors (instructor_id, course_id, department) VALUES (?, ?, ?)`,
+        args: [instructor_id, Number(result.lastInsertRowid), instructorCheck.rows[0].department]
       });
     }
     res.status(200).send({ message: "Course created successfully!", details: result });
@@ -156,13 +194,13 @@ export const getCourseById = async (req, res) => {
   const { id } = req.params;
   try {
     const courseResult = await db.execute({
-        sql: `
+      sql: `
             SELECT c.*, u.username as instructor
             FROM courses c
             LEFT JOIN users u ON c.instructor_id = u.id
             WHERE c.id = ?
         `,
-        args: [id]
+      args: [id]
     });
 
     if (courseResult.rows.length > 0) {

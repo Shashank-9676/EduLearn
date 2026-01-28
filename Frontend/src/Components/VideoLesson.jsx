@@ -6,7 +6,7 @@ const VideoLesson = ({ lesson, isOpen, onClose,completed, setCompleted }) => {
 if (!isOpen || !lesson) return null;
   const handleToggle = async() => {
     try {
-      const response = await fetch('https://edulearn-hn19.onrender.com/progress/', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/progress/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

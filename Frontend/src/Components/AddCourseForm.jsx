@@ -11,13 +11,13 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
     instructor_id: '',
     level: '',
     status: 'draft',
-    created_by : userDetails.id
+    created_by : userDetails?.id
   });
   const [error,setError] = useState(null);
   const [instructorOptions, setInstructorOptions] = useState([]);
   const fetchInstructors = async () => {
     try {
-      const response = await fetch('https://edulearn-hn19.onrender.com/instructors',{credentials:'include'});
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/instructors`,{credentials:'include'});
       const data = await response.json();
       setInstructorOptions(data.details.map(inst => ({ value: inst.instructor_id, label: `${inst.username} - ${inst.department}` })));
     } catch (err) {
@@ -26,7 +26,7 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
     }
   };
   useEffect(() => {
-    if(userDetails.role == "admin") {
+    if(userDetails?.role == "admin") {
     fetchInstructors()
     }
   }, []);

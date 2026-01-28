@@ -16,7 +16,7 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [pendingEnrollments, setPendingEnrollments] = useState([]);
   const handleSaveUser = async (userData) => {
-    const response = await fetch('https://edulearn-hn19.onrender.com/instructors', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/instructors`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const AdminDashboard = () => {
   const fetchEnrollmentsCounts = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://edulearn-hn19.onrender.com/stats/admin", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/stats/admin`, {
         credentials: "include",
       });
       const {details} = await response.json();
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
   const fetchEnrollments = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://edulearn-hn19.onrender.com/enrollments/',{credentials:'include'});
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/enrollments/`,{credentials:'include'});
       const { details } = await response.json();
       setUsers(details);
       setPendingEnrollments(details.filter(user => user.status == "pending"));
